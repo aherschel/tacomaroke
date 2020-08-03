@@ -1,4 +1,5 @@
 import AppFooter from "./AppFooter";
 import AppHeader from "./AppHeader";
+import GenrePicker from "./GenrePicker";
 
-export { AppFooter, AppHeader };
+export { AppFooter, AppHeader, GenrePicker };
