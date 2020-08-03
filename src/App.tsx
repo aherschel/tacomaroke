@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import aws_exports from "./aws-exports";
-import { AboutPage } from "./pages";
+import { AboutPage, SongPage } from "./pages";
 import { AppHeader, AppFooter } from "./components";
 
 Amplify.configure(aws_exports);
@@ -28,8 +28,11 @@ const App = () => {
             <Route path="/about">
               <AboutPage />
             </Route>
+            <Route path="/song">
+              <SongPage />
+            </Route>
             <Route path="/">
-              <Redirect to="/about" />
+              <Redirect to="/song" />
             </Route>
           </Switch>
           <AppFooter />
