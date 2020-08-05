@@ -1,52 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
+import { Genre } from "../genres";
 
-const genres: string[] = [
-  "Breakup songs",
-  "Songs about drinking",
-  "Ladies of the 80’s",
-  "Songs about sex",
-  "Songs about butts",
-  "Hair bands",
-  "Pump up songs",
-  "Boy bands",
-  "Hip-hop",
-  "Rap",
-  "Classic rock",
-  "Vans Warped Tour",
-  "The 70’s",
-  "The 80’s",
-  "The 90’s",
-  "Early 2000’s",
-  "Music from Films",
-  "One hit wonders",
-  "90’s country",
-  "Country ladies",
-  "Country fellas",
-  "Songs with a name in the title",
-  "Teenage Love Songs",
-  "Songs about love",
-  "Taylor Swift",
-  "Freeplay!!",
-];
-
-const pickGenre = (): string => {
-  return genres[Math.floor(Math.random() * genres.length)];
+const pickElement = (elements: Genre[]): Genre => {
+  return elements[Math.floor(Math.random() * elements.length)];
 };
 
-const GenrePicker = () => {
-  const [selected, setSelected] = useState<string | undefined>();
+interface GenrePickerProps {
+  genre?: Genre;
+  genres: Genre[];
+  onGenreUpdated: (genre: Genre) => void;
+}
+
+const GenrePicker = (props: GenrePickerProps) => {
+  const { genres, genre, onGenreUpdated } = props;
 
   const selectGenre = () => {
-    setSelected(pickGenre());
+    const newGenre = pickElement(genres);
+    onGenreUpdated(newGenre);
   };
 
   return (
     <>
-      {selected && <p>{selected}</p>}
       <Button variant="outline-primary" onClick={selectGenre}>
         Pick Genre
       </Button>
+      {genre && (
+        <div>
+          <br />
+          <h3>Selected Genre</h3>
+          <p>{genre.name}</p>
+        </div>
+      )}
     </>
   );
 };

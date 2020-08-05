@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { GenrePicker } from "..";
+import { GenreHistory } from "..";
 
-describe("GenrePicker", () => {
+describe("GenreHistory", () => {
   it("renders without crashing", () => {
     const div = document.createElement("div");
-    ReactDOM.render(<GenrePicker genres={[]} onGenreUpdated={() => {}} />, div);
+    ReactDOM.render(<GenreHistory genreHistory={[]} />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });

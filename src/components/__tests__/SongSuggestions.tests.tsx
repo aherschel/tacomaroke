@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { GenrePicker } from "..";
+import { SongSuggestions } from "..";
 
-describe("GenrePicker", () => {
+describe("SongSuggestions", () => {
   it("renders without crashing", () => {
     const div = document.createElement("div");
-    ReactDOM.render(<GenrePicker genres={[]} onGenreUpdated={() => {}} />, div);
+    ReactDOM.render(<SongSuggestions genre={{ name: "Test" }} />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });
