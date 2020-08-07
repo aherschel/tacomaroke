@@ -1,6 +1,11 @@
 import React, { useState } from "react";
-import { Jumbotron, Container, Row, Col } from "react-bootstrap";
-import { GenrePicker, GenreHistory, SongSuggestions } from "../components";
+import { Jumbotron, Container, Row, Col, Tabs, Tab } from "react-bootstrap";
+import {
+  GenrePicker,
+  GenreRandomizer,
+  GenreHistory,
+  SongSuggestions,
+} from "../components";
 import { genres, Genre } from "../genres";
 
 const SongPage = () => {
@@ -24,11 +29,23 @@ const SongPage = () => {
       <Container fluid>
         <Row>
           <Col>
-            <GenrePicker
-              genres={genres}
-              genre={currentGenre}
-              onGenreUpdated={onGenreUpdated}
-            />
+            <Tabs defaultActiveKey="random" id="genre-selection-mode">
+              <Tab eventKey="random" title="Random">
+                <br />
+                <GenreRandomizer
+                  genres={genres}
+                  genre={currentGenre}
+                  onGenreUpdated={onGenreUpdated}
+                />
+              </Tab>
+              <Tab eventKey="selection" title="Selection">
+                <br />
+                <GenrePicker
+                  genres={genres}
+                  onGenreUpdated={onGenreUpdated}
+                />
+              </Tab>
+            </Tabs>
             <GenreHistory genreHistory={genreHistory} />
           </Col>
           {currentGenre && (
