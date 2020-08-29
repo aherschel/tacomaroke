@@ -114,6 +114,14 @@ export const genres: Genre[] = [
     tag: "taylor+swift",
   },
   {
+    name: "Rush",
+    tag: "rush"
+  },
+  {
+    name: "Red Hot Chili Peppers",
+    tag: "red+hot+chili+peppers"
+  },
+  {
     name: "Freeplay!!",
   },
 ];
