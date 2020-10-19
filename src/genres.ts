@@ -34,6 +34,7 @@ export const genres: Genre[] = [
       { name: "Shake Ya Ass", url: "" },
       { name: "Ms. Fat Booty", url: "" },
       { name: "Fat Bottomed Girls", url: "" },
+      { name: "Bubble Butt", url: "" },
     ],
   },
   {
