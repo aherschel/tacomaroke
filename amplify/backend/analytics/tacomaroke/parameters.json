@@ -1,0 +1,20 @@
+{
+    "appName": "tacomaroke",
+    "roleName": "pinpointLambdaRoleed9d30a7",
+    "cloudWatchPolicyName": "cloudWatchPolicyed9d30a7",
+    "pinpointPolicyName": "pinpointPolicyed9d30a7",
+    "authPolicyName": "pinpoint_amplify_ed9d30a7",
+    "unauthPolicyName": "pinpoint_amplify_ed9d30a7",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

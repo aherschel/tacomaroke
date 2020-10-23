@@ -1,5 +1,5 @@
 import React from "react";
-// import { withAuthenticator } from "aws-amplify-react";
+import { withAuthenticator } from "aws-amplify-react";
 import Amplify from "aws-amplify";
 import {
   BrowserRouter as Router,
@@ -11,6 +11,7 @@ import { Container } from "react-bootstrap";
 import aws_exports from "./aws-exports";
 import { AboutPage, SongPage } from "./pages";
 import { AppHeader, AppFooter } from "./components";
+import { isAuthEnabled } from "./FeatureFlags";
 
 Amplify.configure(aws_exports);
 
@@ -42,5 +43,4 @@ const App = () => {
   );
 };
 
-export default App;
-// export default withAuthenticator(App);
+export default isAuthEnabled ? withAuthenticator(App) : App;
