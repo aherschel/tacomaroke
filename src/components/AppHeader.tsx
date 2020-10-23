@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import { Navbar, Nav, Button } from "react-bootstrap";
+import { isAuthEnabled } from "../FeatureFlags";
 
 const signOut = async () => {
   await Auth.signOut();
@@ -24,9 +25,11 @@ const AppHeader = () => {
             About
           </Link>
         </Nav>
-        <Button variant="outline-light" onClick={signOut}>
-          SignOut
-        </Button>
+        {isAuthEnabled && (
+          <Button variant="outline-light" onClick={signOut}>
+            SignOut
+          </Button>
+        )}
       </Navbar.Collapse>
     </Navbar>
   );

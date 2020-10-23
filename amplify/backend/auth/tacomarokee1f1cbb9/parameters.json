@@ -1,6 +1,6 @@
 {
     "identityPoolName": "tacomarokee1f1cbb9_identitypool_e1f1cbb9",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "tacomae1f1cbb9",
     "userPoolName": "tacomarokee1f1cbb9_userpool_e1f1cbb9",
     "autoVerifiedAttributes": [

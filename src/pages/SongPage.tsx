@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Jumbotron, Container, Row, Col, Tabs, Tab } from "react-bootstrap";
+import { Analytics } from "aws-amplify";
 import {
   GenrePicker,
   GenreRandomizer,
@@ -12,7 +13,11 @@ const SongPage = () => {
   const [currentGenre, setCurrentGenre] = useState<Genre | undefined>();
   const [genreHistory, setGenreHistory] = useState<Genre[]>([]);
 
-  const onGenreUpdated = (genre: Genre) => {
+  const onGenreUpdated = (genre: Genre, wasManual: boolean) => {
+    Analytics.record({
+      name: wasManual ? "genreSelected" : "genreRandomized",
+      attributes: { genreName: genre.name },
+    });
     if (currentGenre) {
       setGenreHistory(genreHistory.concat(currentGenre));
     }
@@ -35,14 +40,14 @@ const SongPage = () => {
                 <GenreRandomizer
                   genres={genres}
                   genre={currentGenre}
-                  onGenreUpdated={onGenreUpdated}
+                  onGenreUpdated={(genre) => onGenreUpdated(genre, false)}
                 />
               </Tab>
               <Tab eventKey="selection" title="Selection">
                 <br />
                 <GenrePicker
                   genres={genres}
-                  onGenreUpdated={onGenreUpdated}
+                  onGenreUpdated={(genre) => onGenreUpdated(genre, true)}
                 />
               </Tab>
             </Tabs>
