@@ -4,5 +4,18 @@ import GenrePicker from "./GenrePicker";
 import GenreRandomizer from "./GenreRandomizer";
 import GenreHistory from "./GenreHistory";
 import SongSuggestions from "./SongSuggestions";
+import GenreController from "./GenreController";
+import JoinParty from "./JoinParty";
+import CreateParty from "./CreateParty";
 
-export { AppFooter, AppHeader, GenrePicker, GenreRandomizer, GenreHistory, SongSuggestions };
+export {
+  AppFooter,
+  AppHeader,
+  GenrePicker,
+  GenreRandomizer,
+  GenreHistory,
+  SongSuggestions,
+  GenreController,
+  JoinParty,
+  CreateParty,
+};

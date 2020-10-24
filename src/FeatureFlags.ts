@@ -1,3 +1,2 @@
-const isAuthEnabled = false;
-
-export { isAuthEnabled };
+export const isAuthEnabled = false;
+export const isGroupPlayEnabled = false;

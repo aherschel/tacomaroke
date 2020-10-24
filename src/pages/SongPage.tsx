@@ -1,29 +1,8 @@
-import React, { useState } from "react";
-import { Jumbotron, Container, Row, Col, Tabs, Tab } from "react-bootstrap";
-import { Analytics } from "aws-amplify";
-import {
-  GenrePicker,
-  GenreRandomizer,
-  GenreHistory,
-  SongSuggestions,
-} from "../components";
-import { genres, Genre } from "../genres";
+import React from "react";
+import { Jumbotron } from "react-bootstrap";
+import { GenreController } from "../components";
 
 const SongPage = () => {
-  const [currentGenre, setCurrentGenre] = useState<Genre | undefined>();
-  const [genreHistory, setGenreHistory] = useState<Genre[]>([]);
-
-  const onGenreUpdated = (genre: Genre, wasManual: boolean) => {
-    Analytics.record({
-      name: wasManual ? "genreSelected" : "genreRandomized",
-      attributes: { genreName: genre.name },
-    });
-    if (currentGenre) {
-      setGenreHistory(genreHistory.concat(currentGenre));
-    }
-    setCurrentGenre(genre);
-  };
-
   return (
     <>
       <br />
@@ -31,35 +10,7 @@ const SongPage = () => {
         <h1>Pick A Song</h1>
         <p>Pick a category using the tool below.</p>
       </Jumbotron>
-      <Container fluid>
-        <Row>
-          <Col>
-            <Tabs defaultActiveKey="random" id="genre-selection-mode">
-              <Tab eventKey="random" title="Random">
-                <br />
-                <GenreRandomizer
-                  genres={genres}
-                  genre={currentGenre}
-                  onGenreUpdated={(genre) => onGenreUpdated(genre, false)}
-                />
-              </Tab>
-              <Tab eventKey="selection" title="Selection">
-                <br />
-                <GenrePicker
-                  genres={genres}
-                  onGenreUpdated={(genre) => onGenreUpdated(genre, true)}
-                />
-              </Tab>
-            </Tabs>
-            <GenreHistory genreHistory={genreHistory} />
-          </Col>
-          {currentGenre && (
-            <Col>
-              <SongSuggestions genre={currentGenre} />
-            </Col>
-          )}
-        </Row>
-      </Container>
+      <GenreController />
     </>
   );
 };
