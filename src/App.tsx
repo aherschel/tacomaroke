@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import aws_exports from "./aws-exports";
-import { AboutPage, SongPage } from "./pages";
+import { AboutPage, SongPage, PartyPage } from "./pages";
 import { AppHeader, AppFooter } from "./components";
 import { isAuthEnabled } from "./FeatureFlags";
 
@@ -31,6 +31,9 @@ const App = () => {
             </Route>
             <Route path="/song">
               <SongPage />
+            </Route>
+            <Route path="/party">
+              <PartyPage />
             </Route>
             <Route path="/">
               <Redirect to="/song" />

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import { isAuthEnabled } from "../FeatureFlags";
+import { isAuthEnabled, isGroupPlayEnabled } from "../FeatureFlags";
 
 const signOut = async () => {
   await Auth.signOut();
@@ -18,9 +18,21 @@ const AppHeader = () => {
       <Navbar.Toggle aria-controls="navbar" />
       <Navbar.Collapse id="navbar">
         <Nav className="mr-auto">
-          <Link className="nav-link" to="/song">
-            Song Picker
-          </Link>
+          {isGroupPlayEnabled && (
+            <>
+              <Link className="nav-link" to="/song">
+                Solo Mode
+              </Link>
+              <Link className="nav-link" to="/party">
+                Party Mode
+              </Link>
+            </>
+          )}
+          {!isGroupPlayEnabled && (
+            <Link className="nav-link" to="/song">
+              Song Picker
+            </Link>
+          )}
           <Link className="nav-link" to="/about">
             About
           </Link>
