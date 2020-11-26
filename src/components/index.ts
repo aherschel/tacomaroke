@@ -7,6 +7,7 @@ import SongSuggestions from "./SongSuggestions";
 import GenreController from "./GenreController";
 import JoinParty from "./JoinParty";
 import CreateParty from "./CreateParty";
+import HostParty from "./HostParty";
 
 export {
   AppFooter,
@@ -18,4 +19,5 @@ export {
   GenreController,
   JoinParty,
   CreateParty,
+  HostParty,
 };

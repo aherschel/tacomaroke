@@ -1,38 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Party, createParty } from "../api/PartyClient";
+import { createParty, Party } from "../api/PartyClient";
 
-type ComponentState = "Creating" | "Created" | "Started";
+interface CreatePartyProps {
+  onPartyCreated: (party: Party) => void;
+}
 
-const CreateParty = () => {
-  const [party, setParty] = useState<Party | undefined>();
-  const [componentState, setState] = useState<ComponentState>("Creating");
+const CreateParty = (props: CreatePartyProps) => {
+  const { onPartyCreated } = props;
+  const [creationInProgress, setSucceeded] = useState(true);
 
   useEffect(() => {
     const generateParty = async () => {
-      setParty(await createParty());
-      setState("Created");
+      try {
+        const partySession = await createParty();
+        onPartyCreated(partySession);
+      } catch (e) {
+        console.error(`Caught error creating party: ${JSON.stringify(e)}`);
+        setSucceeded(false);
+      }
     };
     generateParty();
-  }, []);
+  }, [onPartyCreated]);
 
-  switch (componentState) {
-    case "Creating":
-      return (
-        <div>
-          <p>Loading</p>
-        </div>
-      );
-    case "Created":
-      return (
-        <>
-          <p>Loaded Party {party!!.name}</p>
-        </>
-      );
-    case "Started":
-      return <div />;
-    default:
-      return <div />;
+  if (creationInProgress) {
+    return (
+      <div>
+        <p>Loading..</p>
+      </div>
+    );
   }
+
+  return <p>Failed to create a party.</p>;
 };
 
 export default CreateParty;

@@ -1,0 +1,9 @@
+type PartySession
+  @model
+  @key(fields: ["city", "sessionStartTime"], name: "cityByStartTime", queryField: "partySessionCityByStartTime") {
+    id: ID!
+    city: String!
+    sessionStartTime: String!
+    sessionState: String!
+    genreCode: String
+}
