@@ -9,6 +9,10 @@ export type Genre = {
   tracks?: Track[];
 };
 
+export const getGenreByCode = (genreCode: string): Genre => {
+  return genres.filter((genre) => genre.name === genreCode)[0];
+};
+
 // Where possible use a tag to search last.fm, but you can provide tracks manually as well.
 export const genres: Genre[] = [
   {
@@ -116,11 +120,11 @@ export const genres: Genre[] = [
   },
   {
     name: "Rush",
-    tag: "rush"
+    tag: "rush",
   },
   {
     name: "Red Hot Chili Peppers",
-    tag: "red+hot+chili+peppers"
+    tag: "red+hot+chili+peppers",
   },
   {
     name: "Freeplay!!",

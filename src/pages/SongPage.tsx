@@ -10,7 +10,7 @@ const SongPage = () => {
         <h1>Pick A Song</h1>
         <p>Pick a category using the tool below.</p>
       </Jumbotron>
-      <GenreController />
+      <GenreController isController remoteParty={undefined} />
     </>
   );
 };

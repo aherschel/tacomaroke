@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Jumbotron, Container, Row, Col, Button } from "react-bootstrap";
-import { GenreController, CreateParty, JoinParty } from "../components";
+import { JoinParty, HostParty } from "../components";
 
 type PartyState = "NotStarted" | "Host" | "Attendee";
 
@@ -46,12 +46,7 @@ const PartyPage = () => {
               </Container>
             );
           case "Host":
-            return (
-              <>
-                <CreateParty />
-                <GenreController />
-              </>
-            );
+            return <HostParty />;
           case "Attendee":
             return <JoinParty />;
           default:

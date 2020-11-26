@@ -7,13 +7,12 @@ const pickElement = (elements: Genre[]): Genre => {
 };
 
 interface GenreRandomizerProps {
-  genre?: Genre;
   genres: Genre[];
   onGenreUpdated: (genre: Genre) => void;
 }
 
 const GenreRandomizer = (props: GenreRandomizerProps) => {
-  const { genres, genre, onGenreUpdated } = props;
+  const { genres, onGenreUpdated } = props;
 
   const selectGenre = () => {
     const newGenre = pickElement(genres);
@@ -25,13 +24,6 @@ const GenreRandomizer = (props: GenreRandomizerProps) => {
       <Button variant="outline-primary" onClick={selectGenre}>
         Get Random Genre
       </Button>
-      {genre && (
-        <div>
-          <br />
-          <h3>Selected Genre</h3>
-          <p>{genre.name}</p>
-        </div>
-      )}
     </>
   );
 };
