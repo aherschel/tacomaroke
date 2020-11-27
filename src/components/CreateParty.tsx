@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Spinner } from "react-bootstrap";
 import { createParty, Party } from "../api/PartyClient";
 
 interface CreatePartyProps {
@@ -24,9 +25,9 @@ const CreateParty = (props: CreatePartyProps) => {
 
   if (creationInProgress) {
     return (
-      <div>
-        <p>Loading..</p>
-      </div>
+      <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
     );
   }
 

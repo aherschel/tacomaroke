@@ -6,14 +6,22 @@ type PartyState = "NotStarted" | "Host" | "Attendee";
 
 const PartyPage = () => {
   const [partyState, setPartyState] = useState<PartyState>("NotStarted");
+  const [hasStarted, setStarted] = useState(false);
+
+  const setState = (state: PartyState) => {
+    setPartyState(state);
+    setStarted(true);
+  };
 
   return (
     <>
       <br />
-      <Jumbotron>
-        <h1>Party Play</h1>
-        <p>Either Start or join a party!</p>
-      </Jumbotron>
+      {!hasStarted && (
+        <Jumbotron>
+          <h1>Party Play</h1>
+          <p>Either Start or join a party!</p>
+        </Jumbotron>
+      )}
       {(function () {
         switch (partyState) {
           case "NotStarted":
@@ -25,7 +33,7 @@ const PartyPage = () => {
                     <Button
                       variant="outline-primary"
                       onClick={() => {
-                        setPartyState("Host");
+                        setState("Host");
                       }}
                     >
                       Start Party
@@ -35,7 +43,7 @@ const PartyPage = () => {
                     <Button
                       variant="outline-primary"
                       onClick={() => {
-                        setPartyState("Attendee");
+                        setState("Attendee");
                       }}
                     >
                       Join Party
@@ -46,9 +54,43 @@ const PartyPage = () => {
               </Container>
             );
           case "Host":
-            return <HostParty />;
+            return (
+              <>
+                <Container fluid>
+                  <Row>
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => {
+                        setState("NotStarted");
+                      }}
+                    >
+                      Start Over
+                    </Button>
+                  </Row>
+                </Container>
+                <HostParty />
+              </>
+            );
           case "Attendee":
-            return <JoinParty />;
+            return (
+              <>
+                <Container fluid>
+                  <Row>
+                    <Col>
+                      <Button
+                        variant="outline-primary"
+                        onClick={() => {
+                          setState("NotStarted");
+                        }}
+                      >
+                        Start Over
+                      </Button>
+                    </Col>
+                  </Row>
+                </Container>
+                <JoinParty />
+              </>
+            );
           default:
             return <div />;
         }
