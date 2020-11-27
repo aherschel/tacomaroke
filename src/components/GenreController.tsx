@@ -23,7 +23,10 @@ const GenreController = (props: GenreControllerProps) => {
       ).subscribe({
         next: (data: any) => {
           const updatedPartySession = data.value.data.onUpdatePartySession;
-          if (updatedPartySession.genreCode) {
+          if (
+            updatedPartySession.id === remoteParty.id &&
+            updatedPartySession.genreCode
+          ) {
             const genre = getGenreByCode(updatedPartySession.genreCode);
             if (currentGenre) {
               setGenreHistory(genreHistory.concat(currentGenre));

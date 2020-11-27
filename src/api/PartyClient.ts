@@ -1,13 +1,14 @@
 import { API, graphqlOperation } from "aws-amplify";
 import {
   CreatePartySessionMutationVariables,
+  GetPartySessionQueryVariables,
   ListPartySessionsQueryVariables,
   ModelSortDirection,
   PartySessionCityByStartTimeQueryVariables,
   UpdatePartySessionMutationVariables,
 } from "../API";
 import { createPartySession, updatePartySession } from "../graphql/mutations";
-import { listPartySessions, partySessionCityByStartTime } from "../graphql/queries";
+import { getPartySession, listPartySessions, partySessionCityByStartTime } from "../graphql/queries";
 
 const cities: string[] = [
   "boston",
@@ -66,6 +67,16 @@ export const startParty = async (partyId: string): Promise<void> => {
   await API.graphql(graphqlOperation(updatePartySession, mutation));
 };
 
+export const endParty = async (partyId: string): Promise<void> => {
+  const mutation: UpdatePartySessionMutationVariables = {
+    input: {
+      id: partyId,
+      sessionState: "Ended",
+    },
+  };
+  await API.graphql(graphqlOperation(updatePartySession, mutation));
+};
+
 export const updateGenre = async (
   partyId: string,
   genreCode: string
@@ -79,7 +90,7 @@ export const updateGenre = async (
   return API.graphql(graphqlOperation(updatePartySession, mutation));
 };
 
-export const joinParty = async (city: string): Promise<Party> => {
+export const joinPartyByName = async (city: string): Promise<Party> => {
   const mutation: PartySessionCityByStartTimeQueryVariables = {
     city,
     sortDirection: ModelSortDirection.DESC,
@@ -95,4 +106,16 @@ export const joinParty = async (city: string): Promise<Party> => {
   throw new Error(
     "Expected to find at least one party that was being created."
   );
+};
+
+export const joinPartyById = async (partyId: string): Promise<Party> => {
+  const mutation: GetPartySessionQueryVariables = { id: partyId };
+  const response = await API.graphql(
+    graphqlOperation(getPartySession, mutation)
+  );
+  const party: Party = response.data.getPartySession;
+  if (party && party.sessionState === "Creating") {
+    return party;
+  }
+  throw new Error("Expected to find party that was being created.");
 };

@@ -1,10 +1,11 @@
 import { API, graphqlOperation } from "aws-amplify";
 import React, { useEffect, useState } from "react";
-import { Row, Col, InputGroup, FormControl, Button } from "react-bootstrap";
-import { joinParty, listParties, Party } from "../api/PartyClient";
+import { Row, Col, InputGroup, FormControl, Button, Spinner } from "react-bootstrap";
+import { joinPartyByName, joinPartyById, listParties, Party } from "../api/PartyClient";
 import { isPartyListEnabled } from "../FeatureFlags";
 import { onCreatePartySession } from "../graphql/subscriptions";
 import GenreController from "./GenreController";
+import PartyList from "./PartyList";
 
 type ComponentState = "NotStarted" | "Joining" | "Joined" | "Failed";
 
@@ -48,7 +49,7 @@ const JoinParty = () => {
   const join = async () => {
     setState("Joining");
     try {
-      const party = await joinParty(partyName);
+      const party = await joinPartyByName(partyName);
       console.log(`Joined party: ${JSON.stringify(party)}`);
       setJoinedParty(party);
       setState("Joined");
@@ -58,51 +59,86 @@ const JoinParty = () => {
     }
   };
 
+  const onPartySelected = async (partyId: string) => {
+    setState("Joining");
+    try {
+      const party = await joinPartyById(partyId);
+      console.log(`Joined party: ${JSON.stringify(party)}`);
+      setJoinedParty(party);
+      setState("Joined");
+    } catch (e) {
+      console.error(`Failed to join party ${partyName}, caught: ${e.message}`);
+      setState("Failed");
+    }
+  };
+
+  if (!openParties) {
+    return (
+      <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    );
+  }
+
   switch (componentState) {
     case "NotStarted":
       return (
         <>
-          <Row>
-            <Col />
-            <Col>
-              <InputGroup className="mb-3">
-                <FormControl
-                  placeholder="Party Id"
-                  aria-label="PartyId"
-                  aria-describedby="basic-addon1"
-                  onChange={handlePartyNameChange}
-                />
-                <InputGroup.Append>
-                  <InputGroup.Text id="basic-addon2">-roke</InputGroup.Text>
-                </InputGroup.Append>
-              </InputGroup>
-            </Col>
-            <Col>
-              <Button variant="outline-primary" onClick={join}>
-                Join
-              </Button>
-            </Col>
-            <Col />
-          </Row>
-          {isPartyListEnabled && openParties && (
+          {!isPartyListEnabled && (
             <Row>
+              <Col />
               <Col>
-                <ul>
-                  {openParties.map((party) => (
-                    <h5>{JSON.stringify(party)}</h5>
-                  ))}
-                </ul>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="Party Id"
+                    aria-label="PartyId"
+                    aria-describedby="basic-addon1"
+                    onChange={handlePartyNameChange}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Text id="basic-addon2">-roke</InputGroup.Text>
+                  </InputGroup.Append>
+                </InputGroup>
               </Col>
+              <Col>
+                <Button variant="outline-primary" onClick={join}>
+                  Join
+                </Button>
+              </Col>
+              <Col />
             </Row>
+          )}
+          {isPartyListEnabled && (
+            <>
+              <br />
+              <h3>Select a party to join below.</h3>
+              <PartyList
+                parties={openParties}
+                onPartySelected={onPartySelected}
+              />
+            </>
           )}
         </>
       );
     case "Joining":
-      return <p>Joining {partyName}</p>;
+      return (
+        <>
+          <br />
+          <h3>Joining {partyName}-roke</h3>
+          <Spinner animation="border" role="status">
+            <span className="sr-only">Loading...</span>
+          </Spinner>
+        </>
+      );
     case "Joined":
       return (
         <>
-          <h5>Joined {joinedParty!!.city}-roke</h5>
+          <br />
+          <h3>Joined {joinedParty!!.city}-roke</h3>
+          <p>
+            The party creator will be able to select new genres, which will show
+            up below.
+          </p>
           <GenreController isController={false} remoteParty={joinedParty} />
         </>
       );
