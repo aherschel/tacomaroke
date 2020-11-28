@@ -1,5 +1,5 @@
 import React from "react";
-import { Genre } from "../genres";
+import { Genre } from "../api/genres";
 
 interface GenreHistoryProps {
   currentGenre: Genre | undefined;

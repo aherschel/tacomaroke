@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { endParty, Party, startParty } from "../api/PartyClient";
+import { partyClient, Party } from "../api/PartyClient";
 import CreateParty from "./CreateParty";
 import GenreController from "./GenreController";
 
@@ -13,7 +13,7 @@ const HostParty = () => {
   useEffect(() => {
     return () => {
       if (createdPartySession) {
-        endParty(createdPartySession.id);
+        partyClient.endParty(createdPartySession.id);
       }
     };
   });
@@ -25,11 +25,15 @@ const HostParty = () => {
 
   const onStartClicked = async (partySession: Party) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await startParty(partySession.id!!);
+    await partyClient.startParty(partySession.id!!);
     setPartyStarted(true);
   };
 
-  if (createdPartySession && !isPartyStarted) {
+  if (!createdPartySession) {
+    return <CreateParty onPartyCreated={onPartyCreated} />;
+  }
+
+  if (!isPartyStarted) {
     return (
       <>
         <br />
@@ -44,19 +48,14 @@ const HostParty = () => {
       </>
     );
   }
-
-  if (createdPartySession && isPartyStarted) {
-    return (
-      <>
-        <br />
-        <h3>Started party {createdPartySession.city}-roke</h3>
-        <p>The genres you select below will be visible to all party members.</p>
-        <GenreController isController remoteParty={createdPartySession} />
-      </>
-    );
-  }
-
-  return <CreateParty onPartyCreated={onPartyCreated} />;
+  return (
+    <>
+      <br />
+      <h3>Started party {createdPartySession.city}-roke</h3>
+      <p>The genres you select below will be visible to all party members.</p>
+      <GenreController isController remoteParty={createdPartySession} />
+    </>
+  );
 };
 
 export default HostParty;

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { GenrePicker } from "..";
+import GenrePicker from "../GenrePicker";
 
 describe("GenrePicker", () => {
   it("renders without crashing", () => {

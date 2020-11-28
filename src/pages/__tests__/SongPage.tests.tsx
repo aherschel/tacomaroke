@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { SongPage } from "..";
+import SongPage from "../SongPage";
 
 describe("SongPage", () => {
   it("renders without crashing", () => {

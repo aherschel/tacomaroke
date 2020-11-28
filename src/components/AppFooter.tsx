@@ -11,7 +11,7 @@ const AppFooter = () => {
             <FaChevronLeft /> Visit Dempsey Tools
           </Nav.Link>
           <Nav.Link href="https://github.com/aherschel/tacomaroke">
-              <FaGithub /> View Source
+            <FaGithub /> View Source
           </Nav.Link>
         </Nav>
       </Container>

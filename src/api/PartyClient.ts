@@ -8,21 +8,14 @@ import {
   UpdatePartySessionMutationVariables,
 } from "../API";
 import { createPartySession, updatePartySession } from "../graphql/mutations";
-import { getPartySession, listPartySessions, partySessionCityByStartTime } from "../graphql/queries";
-
-const cities: string[] = [
-  "boston",
-  "tacoma",
-  "seattle",
-  "ontario",
-  "quebec",
-  "austin",
-  "detroit",
-];
+import {
+  getPartySession,
+  listPartySessions,
+  partySessionCityByStartTime,
+} from "../graphql/queries";
+import cities from "./cities";
 
 export type SessionState = "Creating" | "InProgress" | "Ended";
-
-const getRandomCity = () => cities[Math.floor(Math.random() * cities.length)];
 
 export type Party = {
   id: string;
@@ -33,89 +26,93 @@ export type Party = {
   owner: string | null;
 };
 
-export const listParties = async (): Promise<Party[]> => {
-  const mutation: ListPartySessionsQueryVariables = {
-    filter: { sessionState: { eq: "Creating" } },
+class PartyClient {
+  listParties = async (): Promise<Party[]> => {
+    const mutation: ListPartySessionsQueryVariables = {
+      filter: { sessionState: { eq: "Creating" } },
+    };
+    const response = await API.graphql(
+      graphqlOperation(listPartySessions, mutation)
+    );
+    return response.data.listPartySessions.items;
   };
-  const response = await API.graphql(
-    graphqlOperation(listPartySessions, mutation)
-  );
-  return response.data.listPartySessions.items;
-};
 
-export const createParty = async (): Promise<Party> => {
-  const mutation: CreatePartySessionMutationVariables = {
-    input: {
-      city: getRandomCity(),
-      sessionStartTime: new Date().toISOString(),
-      sessionState: "Creating",
-    },
+  createParty = async (): Promise<Party> => {
+    const mutation: CreatePartySessionMutationVariables = {
+      input: {
+        city: this.getRandomCity(),
+        sessionStartTime: new Date().toISOString(),
+        sessionState: "Creating",
+      },
+    };
+    const response = await API.graphql(
+      graphqlOperation(createPartySession, mutation)
+    );
+    return response.data.createPartySession;
   };
-  const response = await API.graphql(
-    graphqlOperation(createPartySession, mutation)
-  );
-  return response.data.createPartySession;
-};
 
-export const startParty = async (partyId: string): Promise<void> => {
-  const mutation: UpdatePartySessionMutationVariables = {
-    input: {
-      id: partyId,
-      sessionState: "InProgress",
-    },
+  startParty = async (partyId: string): Promise<void> => {
+    const mutation: UpdatePartySessionMutationVariables = {
+      input: {
+        id: partyId,
+        sessionState: "InProgress",
+      },
+    };
+    await API.graphql(graphqlOperation(updatePartySession, mutation));
   };
-  await API.graphql(graphqlOperation(updatePartySession, mutation));
-};
 
-export const endParty = async (partyId: string): Promise<void> => {
-  const mutation: UpdatePartySessionMutationVariables = {
-    input: {
-      id: partyId,
-      sessionState: "Ended",
-    },
+  endParty = async (partyId: string): Promise<void> => {
+    const mutation: UpdatePartySessionMutationVariables = {
+      input: {
+        id: partyId,
+        sessionState: "Ended",
+      },
+    };
+    await API.graphql(graphqlOperation(updatePartySession, mutation));
   };
-  await API.graphql(graphqlOperation(updatePartySession, mutation));
-};
 
-export const updateGenre = async (
-  partyId: string,
-  genreCode: string
-): Promise<void> => {
-  const mutation: UpdatePartySessionMutationVariables = {
-    input: {
-      id: partyId,
-      genreCode,
-    },
+  updateGenre = async (partyId: string, genreCode: string): Promise<void> => {
+    const mutation: UpdatePartySessionMutationVariables = {
+      input: {
+        id: partyId,
+        genreCode,
+      },
+    };
+    return API.graphql(graphqlOperation(updatePartySession, mutation));
   };
-  return API.graphql(graphqlOperation(updatePartySession, mutation));
-};
 
-export const joinPartyByName = async (city: string): Promise<Party> => {
-  const mutation: PartySessionCityByStartTimeQueryVariables = {
-    city,
-    sortDirection: ModelSortDirection.DESC,
-    limit: 1,
+  joinPartyByName = async (city: string): Promise<Party> => {
+    const mutation: PartySessionCityByStartTimeQueryVariables = {
+      city,
+      sortDirection: ModelSortDirection.DESC,
+      limit: 1,
+    };
+    const response = await API.graphql(
+      graphqlOperation(partySessionCityByStartTime, mutation)
+    );
+    const parties: Party[] = response.data.partySessionCityByStartTime.items;
+    if (parties.length === 1 && parties[0].sessionState === "Creating") {
+      return parties[0];
+    }
+    throw new Error(
+      "Expected to find at least one party that was being created."
+    );
   };
-  const response = await API.graphql(
-    graphqlOperation(partySessionCityByStartTime, mutation)
-  );
-  const parties: Party[] = response.data.partySessionCityByStartTime.items;
-  if (parties.length === 1 && parties[0].sessionState === "Creating") {
-    return parties[0];
-  }
-  throw new Error(
-    "Expected to find at least one party that was being created."
-  );
-};
 
-export const joinPartyById = async (partyId: string): Promise<Party> => {
-  const mutation: GetPartySessionQueryVariables = { id: partyId };
-  const response = await API.graphql(
-    graphqlOperation(getPartySession, mutation)
-  );
-  const party: Party = response.data.getPartySession;
-  if (party && party.sessionState === "Creating") {
-    return party;
-  }
-  throw new Error("Expected to find party that was being created.");
-};
+  joinPartyById = async (partyId: string): Promise<Party> => {
+    const mutation: GetPartySessionQueryVariables = { id: partyId };
+    const response = await API.graphql(
+      graphqlOperation(getPartySession, mutation)
+    );
+    const party: Party = response.data.getPartySession;
+    if (party && party.sessionState === "Creating") {
+      return party;
+    }
+    throw new Error("Expected to find party that was being created.");
+  };
+
+  private getRandomCity = () =>
+    cities[Math.floor(Math.random() * cities.length)];
+}
+
+export const partyClient = new PartyClient();

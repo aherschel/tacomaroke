@@ -38,7 +38,7 @@ const PartyList = (props: PartyListProps) => {
         {Object.keys(uniqueCities)
           .map((cityName) => uniqueCities[cityName])
           .map((party) => (
-            <Row>
+            <Row key={party.id}>
               <Button
                 style={buttonStyle}
                 variant="outline-primary"
