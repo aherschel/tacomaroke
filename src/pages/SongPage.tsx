@@ -1,6 +1,6 @@
 import React from "react";
 import { Jumbotron } from "react-bootstrap";
-import { GenreController } from "../components";
+import GenreController from "../components/GenreController";
 
 const SongPage = () => {
   return (

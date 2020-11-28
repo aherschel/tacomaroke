@@ -1,7 +1,14 @@
 import { API, graphqlOperation } from "aws-amplify";
 import React, { useEffect, useState } from "react";
-import { Row, Col, InputGroup, FormControl, Button, Spinner } from "react-bootstrap";
-import { joinPartyByName, joinPartyById, listParties, Party } from "../api/PartyClient";
+import {
+  Row,
+  Col,
+  InputGroup,
+  FormControl,
+  Button,
+  Spinner,
+} from "react-bootstrap";
+import { partyClient, Party } from "../api/PartyClient";
 import { isPartyListEnabled } from "../FeatureFlags";
 import { onCreatePartySession } from "../graphql/subscriptions";
 import GenreController from "./GenreController";
@@ -17,7 +24,7 @@ const JoinParty = () => {
 
   useEffect(() => {
     const loadParties = async () => {
-      const parties = await listParties();
+      const parties = await partyClient.listParties();
       setOpenParties(parties);
     };
     loadParties();
@@ -49,7 +56,7 @@ const JoinParty = () => {
   const join = async () => {
     setState("Joining");
     try {
-      const party = await joinPartyByName(partyName);
+      const party = await partyClient.joinPartyByName(partyName);
       console.log(`Joined party: ${JSON.stringify(party)}`);
       setJoinedParty(party);
       setState("Joined");
@@ -62,7 +69,7 @@ const JoinParty = () => {
   const onPartySelected = async (partyId: string) => {
     setState("Joining");
     try {
-      const party = await joinPartyById(partyId);
+      const party = await partyClient.joinPartyById(partyId);
       console.log(`Joined party: ${JSON.stringify(party)}`);
       setJoinedParty(party);
       setState("Joined");

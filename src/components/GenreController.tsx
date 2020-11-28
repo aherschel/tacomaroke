@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Tabs, Tab } from "react-bootstrap";
 import { Analytics, API, graphqlOperation } from "aws-amplify";
-import { GenrePicker, GenreRandomizer, GenreHistory, SongSuggestions } from ".";
-import { genres, Genre, getGenreByCode } from "../genres";
-import { Party, updateGenre } from "../api/PartyClient";
+import { genres, Genre } from "../api/genres";
+import { Party, partyClient } from "../api/PartyClient";
 import { onUpdatePartySession } from "../graphql/subscriptions";
+import GenreRandomizer from "./GenreRandomizer";
+import GenrePicker from "./GenrePicker";
+import GenreHistory from "./GenreHistory";
+import SongSuggestions from "./SongSuggestions";
+import genreClient from "../api/GenreClient";
 
 type GenreControllerProps = {
   isController: boolean;
@@ -27,7 +31,9 @@ const GenreController = (props: GenreControllerProps) => {
             updatedPartySession.id === remoteParty.id &&
             updatedPartySession.genreCode
           ) {
-            const genre = getGenreByCode(updatedPartySession.genreCode);
+            const genre = genreClient.getGenreByCode(
+              updatedPartySession.genreCode
+            );
             if (currentGenre) {
               setGenreHistory(genreHistory.concat(currentGenre));
             }
@@ -60,7 +66,7 @@ const GenreController = (props: GenreControllerProps) => {
       setGenreHistory(genreHistory.concat(currentGenre));
     }
     if (remoteParty) {
-      await updateGenre(remoteParty.id!!, genre.name);
+      await partyClient.updateGenre(remoteParty.id!!, genre.name);
     }
     setCurrentGenre(genre);
   };

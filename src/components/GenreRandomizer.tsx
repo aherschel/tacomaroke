@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { Genre } from "../genres";
+import { Genre } from "../api/genres";
 
 const pickElement = (elements: Genre[]): Genre => {
   return elements[Math.floor(Math.random() * elements.length)];

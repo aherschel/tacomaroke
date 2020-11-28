@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { Genre } from "../genres";
+import { Genre } from "../api/genres";
 
 interface GenrePickerProps {
   genres: Genre[];
@@ -13,7 +13,7 @@ const GenrePicker = (props: GenrePickerProps) => {
   return (
     <>
       {genres.map((genre) => (
-        <div>
+        <div key={genre.name}>
           <Button
             size="sm"
             variant="outline-primary"

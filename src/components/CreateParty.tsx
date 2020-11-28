@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Spinner } from "react-bootstrap";
-import { createParty, Party } from "../api/PartyClient";
+import { partyClient, Party } from "../api/PartyClient";
 
 interface CreatePartyProps {
   onPartyCreated: (party: Party) => void;
@@ -13,7 +13,7 @@ const CreateParty = (props: CreatePartyProps) => {
   useEffect(() => {
     const generateParty = async () => {
       try {
-        const partySession = await createParty();
+        const partySession = await partyClient.createParty();
         onPartyCreated(partySession);
       } catch (e) {
         console.error(`Caught error creating party: ${JSON.stringify(e)}`);

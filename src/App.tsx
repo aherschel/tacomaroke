@@ -9,9 +9,12 @@ import {
 } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import aws_exports from "./aws-exports";
-import { AboutPage, SongPage, PartyPage } from "./pages";
-import { AppHeader, AppFooter } from "./components";
 import { isAuthEnabled } from "./FeatureFlags";
+import AppHeader from "./components/AppHeader";
+import AppFooter from "./components/AppFooter";
+import AboutPage from "./pages/AboutPage";
+import SongPage from "./pages/SongPage";
+import PartyPage from "./pages/PartyPage";
 
 Amplify.configure(aws_exports);
 
