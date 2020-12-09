@@ -20,12 +20,17 @@ const JoinParty = () => {
   const [partyName, setPartyName] = useState("");
   const [joinedParty, setJoinedParty] = useState<Party | undefined>();
   const [componentState, setState] = useState<ComponentState>("NotStarted");
+  const [isLoading, setLoading] = useState(true);
   const [openParties, setOpenParties] = useState<Party[] | undefined>();
 
   useEffect(() => {
     const loadParties = async () => {
-      const parties = await partyClient.listParties();
-      setOpenParties(parties);
+      try {
+        const parties = await partyClient.listParties();
+        setOpenParties(parties);
+      } finally {
+        setLoading(false);
+      }
     };
     loadParties();
   }, []);
@@ -79,12 +84,16 @@ const JoinParty = () => {
     }
   };
 
-  if (!openParties) {
+  if (isLoading) {
     return (
       <Spinner animation="border" role="status">
         <span className="sr-only">Loading...</span>
       </Spinner>
     );
+  }
+
+  if (!openParties) {
+    return <p>Failed to load parties.</p>;
   }
 
   switch (componentState) {
