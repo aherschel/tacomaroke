@@ -1,45 +1,22 @@
-# Create-react-app with AWS Amplify Auth 
+# Tacomaroke 
 
-This auth starter implements withAuthenticator HOC to provide a basic authentication flow for signing up signing in users as well as protected client side routing using AWS Amplify. Auth features: User sign up, User sign in, Multi-factor Authentication, User sign-out.
+Tacomaroke is a website which help you find songs to sing tacomaroke. This is the source for the app, which uses amplify for managing the backend components, and the frontend is built in typescript using react. Backend storage components use Appsync for graphql.
 
-[View Demo](https://master.d2ka7y7551sk8n.amplifyapp.com/)
+## Start development
 
-![Amplify Auth](src/images/auth.gif)
+1. Install the amplify cli - https://docs.amplify.aws/cli/start/install
+1. Pull down this source code, and run `yarn install`
+1. You'll need amplify configured to your account, then run `amplify pull`, if you're moving to a new account you'll need to run either  `amplify push` or `amplify env import` depending on the usecase.
+1. Start the dev server with `yarn start`.
 
-## Deploy with the AWS Amplify Console
+## Testing
 
-The AWS Amplify Console provides hosting for fullstack serverless web apps. [Learn more](https://console.amplify.aws). Deploy this app to your AWS account with a single click:
+Unit tests can be run via `yarn test`
 
-[![amplifybutton](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/aws-samples/create-react-app-auth-amplify)
+## Deploying Changes
 
-The Amplify Console will fork this repo in your GitHub account, and then build and deploy your backend and frontend in a single workflow. Your app will be available at `https://master.appid.amplifyapp.com`.
+Changes are deployed by committing to the two branches in this package.
 
-## Run locally with the Amplify CLI
+The `dev` branch will kick off a deployment to `https://dev.tacomaroke.com/`. _Note: the dev endpoint is password protected._
 
-1. Clone the repo that was just forked in your account
-
-  ```
-  git clone git@github.com:<username>/create-react-app-auth-amplify.git
-
-  cd create-react-app-auth-amplify && npm install
-  ```
-
-2. Import the backend environment deployed by the Amplify Console to your repo (the `amplify/team-provider.json` file contains information on all backend environments in your AWS account). The GIF below shows how you to copy the `amplify env import` command from the Amplify Console. 
-
-<img src="https://github.com/aws-samples/create-react-app-auth-amplify/blob/master/src/images/import-backend.gif" width="800"/>
-
-3. Paste this command into your terminal at the root of your repo. You should see the `amplify/team-provider.json` updated with a backend named `amplify`.
-
-  ```
-  amplify pull
-  ```
-
-![img](src/images/amplify-pull.mov)
-
-4. Run locally
-
-  ```
-  npm start
-  ```
-
-Checkout Nader Dabit's [Complete Guide to User Authentication](https://dev.to/dabit3/the-complete-guide-to-user-authentication-with-the-amplify-framework-2inh).
+Once changes are manually verified in dev, kick off a merge commit to `release`, which will kick off a deployment to `https://www.tacomaroke.com`.
