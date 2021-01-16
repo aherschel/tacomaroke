@@ -8,6 +8,7 @@ export const getSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      expirationTimestamp
       createdAt
       updatedAt
     }
@@ -24,6 +25,7 @@ export const listSingers = /* GraphQL */ `
         id
         name
         partysessionID
+        expirationTimestamp
         createdAt
         updatedAt
       }
@@ -39,6 +41,7 @@ export const getPartySession = /* GraphQL */ `
       sessionStartTime
       sessionState
       genreCode
+      expirationTimestamp
       createdAt
       updatedAt
       singers {
@@ -46,6 +49,7 @@ export const getPartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          expirationTimestamp
           createdAt
           updatedAt
         }
@@ -67,6 +71,7 @@ export const listPartySessions = /* GraphQL */ `
         sessionStartTime
         sessionState
         genreCode
+        expirationTimestamp
         createdAt
         updatedAt
         singers {
@@ -100,6 +105,7 @@ export const partySessionCityByStartTime = /* GraphQL */ `
         sessionStartTime
         sessionState
         genreCode
+        expirationTimestamp
         createdAt
         updatedAt
         singers {
