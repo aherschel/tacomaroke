@@ -1,22 +1,19 @@
 /* tslint:disable */
+/* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreatePartySessionInput = {
+export type CreateSingerInput = {
   id?: string | null,
-  city: string,
-  sessionStartTime: string,
-  sessionState: string,
-  genreCode?: string | null,
+  name: string,
+  partysessionID: string,
 };
 
-export type ModelPartySessionConditionInput = {
-  city?: ModelStringInput | null,
-  sessionStartTime?: ModelStringInput | null,
-  sessionState?: ModelStringInput | null,
-  genreCode?: ModelStringInput | null,
-  and?: Array< ModelPartySessionConditionInput | null > | null,
-  or?: Array< ModelPartySessionConditionInput | null > | null,
-  not?: ModelPartySessionConditionInput | null,
+export type ModelSingerConditionInput = {
+  name?: ModelStringInput | null,
+  partysessionID?: ModelIDInput | null,
+  and?: Array< ModelSingerConditionInput | null > | null,
+  or?: Array< ModelSingerConditionInput | null > | null,
+  not?: ModelSingerConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -59,29 +56,6 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type UpdatePartySessionInput = {
-  id: string,
-  city?: string | null,
-  sessionStartTime?: string | null,
-  sessionState?: string | null,
-  genreCode?: string | null,
-};
-
-export type DeletePartySessionInput = {
-  id?: string | null,
-};
-
-export type ModelPartySessionFilterInput = {
-  id?: ModelIDInput | null,
-  city?: ModelStringInput | null,
-  sessionStartTime?: ModelStringInput | null,
-  sessionState?: ModelStringInput | null,
-  genreCode?: ModelStringInput | null,
-  and?: Array< ModelPartySessionFilterInput | null > | null,
-  or?: Array< ModelPartySessionFilterInput | null > | null,
-  not?: ModelPartySessionFilterInput | null,
-};
-
 export type ModelIDInput = {
   ne?: string | null,
   eq?: string | null,
@@ -96,6 +70,78 @@ export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   size?: ModelSizeInput | null,
+};
+
+export type UpdateSingerInput = {
+  id: string,
+  name?: string | null,
+  partysessionID?: string | null,
+};
+
+export type DeleteSingerInput = {
+  id?: string | null,
+};
+
+export type CreatePartySessionInput = {
+  id?: string | null,
+  city: string,
+  sessionStartTime: string,
+  sessionState: SessionState,
+  genreCode?: string | null,
+};
+
+export enum SessionState {
+  CREATING = "CREATING",
+  INPROGRESS = "INPROGRESS",
+  ENDED = "ENDED",
+}
+
+
+export type ModelPartySessionConditionInput = {
+  city?: ModelStringInput | null,
+  sessionStartTime?: ModelStringInput | null,
+  sessionState?: ModelSessionStateInput | null,
+  genreCode?: ModelStringInput | null,
+  and?: Array< ModelPartySessionConditionInput | null > | null,
+  or?: Array< ModelPartySessionConditionInput | null > | null,
+  not?: ModelPartySessionConditionInput | null,
+};
+
+export type ModelSessionStateInput = {
+  eq?: SessionState | null,
+  ne?: SessionState | null,
+};
+
+export type UpdatePartySessionInput = {
+  id: string,
+  city?: string | null,
+  sessionStartTime?: string | null,
+  sessionState?: SessionState | null,
+  genreCode?: string | null,
+};
+
+export type DeletePartySessionInput = {
+  id?: string | null,
+};
+
+export type ModelSingerFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  partysessionID?: ModelIDInput | null,
+  and?: Array< ModelSingerFilterInput | null > | null,
+  or?: Array< ModelSingerFilterInput | null > | null,
+  not?: ModelSingerFilterInput | null,
+};
+
+export type ModelPartySessionFilterInput = {
+  id?: ModelIDInput | null,
+  city?: ModelStringInput | null,
+  sessionStartTime?: ModelStringInput | null,
+  sessionState?: ModelSessionStateInput | null,
+  genreCode?: ModelStringInput | null,
+  and?: Array< ModelPartySessionFilterInput | null > | null,
+  or?: Array< ModelPartySessionFilterInput | null > | null,
+  not?: ModelPartySessionFilterInput | null,
 };
 
 export type ModelStringKeyConditionInput = {
@@ -114,6 +160,54 @@ export enum ModelSortDirection {
 }
 
 
+export type CreateSingerMutationVariables = {
+  input: CreateSingerInput,
+  condition?: ModelSingerConditionInput | null,
+};
+
+export type CreateSingerMutation = {
+  createSinger:  {
+    __typename: "Singer",
+    id: string,
+    name: string,
+    partysessionID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateSingerMutationVariables = {
+  input: UpdateSingerInput,
+  condition?: ModelSingerConditionInput | null,
+};
+
+export type UpdateSingerMutation = {
+  updateSinger:  {
+    __typename: "Singer",
+    id: string,
+    name: string,
+    partysessionID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteSingerMutationVariables = {
+  input: DeleteSingerInput,
+  condition?: ModelSingerConditionInput | null,
+};
+
+export type DeleteSingerMutation = {
+  deleteSinger:  {
+    __typename: "Singer",
+    id: string,
+    name: string,
+    partysessionID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type CreatePartySessionMutationVariables = {
   input: CreatePartySessionInput,
   condition?: ModelPartySessionConditionInput | null,
@@ -125,8 +219,22 @@ export type CreatePartySessionMutation = {
     id: string,
     city: string,
     sessionStartTime: string,
-    sessionState: string,
+    sessionState: SessionState,
     genreCode: string | null,
+    createdAt: string,
+    updatedAt: string,
+    singers:  {
+      __typename: "ModelSingerConnection",
+      items:  Array< {
+        __typename: "Singer",
+        id: string,
+        name: string,
+        partysessionID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -141,8 +249,22 @@ export type UpdatePartySessionMutation = {
     id: string,
     city: string,
     sessionStartTime: string,
-    sessionState: string,
+    sessionState: SessionState,
     genreCode: string | null,
+    createdAt: string,
+    updatedAt: string,
+    singers:  {
+      __typename: "ModelSingerConnection",
+      items:  Array< {
+        __typename: "Singer",
+        id: string,
+        name: string,
+        partysessionID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -157,8 +279,58 @@ export type DeletePartySessionMutation = {
     id: string,
     city: string,
     sessionStartTime: string,
-    sessionState: string,
+    sessionState: SessionState,
     genreCode: string | null,
+    createdAt: string,
+    updatedAt: string,
+    singers:  {
+      __typename: "ModelSingerConnection",
+      items:  Array< {
+        __typename: "Singer",
+        id: string,
+        name: string,
+        partysessionID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type GetSingerQueryVariables = {
+  id: string,
+};
+
+export type GetSingerQuery = {
+  getSinger:  {
+    __typename: "Singer",
+    id: string,
+    name: string,
+    partysessionID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListSingersQueryVariables = {
+  filter?: ModelSingerFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListSingersQuery = {
+  listSingers:  {
+    __typename: "ModelSingerConnection",
+    items:  Array< {
+      __typename: "Singer",
+      id: string,
+      name: string,
+      partysessionID: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken: string | null,
   } | null,
 };
 
@@ -172,8 +344,22 @@ export type GetPartySessionQuery = {
     id: string,
     city: string,
     sessionStartTime: string,
-    sessionState: string,
+    sessionState: SessionState,
     genreCode: string | null,
+    createdAt: string,
+    updatedAt: string,
+    singers:  {
+      __typename: "ModelSingerConnection",
+      items:  Array< {
+        __typename: "Singer",
+        id: string,
+        name: string,
+        partysessionID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -191,8 +377,14 @@ export type ListPartySessionsQuery = {
       id: string,
       city: string,
       sessionStartTime: string,
-      sessionState: string,
+      sessionState: SessionState,
       genreCode: string | null,
+      createdAt: string,
+      updatedAt: string,
+      singers:  {
+        __typename: "ModelSingerConnection",
+        nextToken: string | null,
+      } | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -215,10 +407,49 @@ export type PartySessionCityByStartTimeQuery = {
       id: string,
       city: string,
       sessionStartTime: string,
-      sessionState: string,
+      sessionState: SessionState,
       genreCode: string | null,
+      createdAt: string,
+      updatedAt: string,
+      singers:  {
+        __typename: "ModelSingerConnection",
+        nextToken: string | null,
+      } | null,
     } | null > | null,
     nextToken: string | null,
+  } | null,
+};
+
+export type OnCreateSingerSubscription = {
+  onCreateSinger:  {
+    __typename: "Singer",
+    id: string,
+    name: string,
+    partysessionID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateSingerSubscription = {
+  onUpdateSinger:  {
+    __typename: "Singer",
+    id: string,
+    name: string,
+    partysessionID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteSingerSubscription = {
+  onDeleteSinger:  {
+    __typename: "Singer",
+    id: string,
+    name: string,
+    partysessionID: string,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -228,8 +459,22 @@ export type OnCreatePartySessionSubscription = {
     id: string,
     city: string,
     sessionStartTime: string,
-    sessionState: string,
+    sessionState: SessionState,
     genreCode: string | null,
+    createdAt: string,
+    updatedAt: string,
+    singers:  {
+      __typename: "ModelSingerConnection",
+      items:  Array< {
+        __typename: "Singer",
+        id: string,
+        name: string,
+        partysessionID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -239,8 +484,22 @@ export type OnUpdatePartySessionSubscription = {
     id: string,
     city: string,
     sessionStartTime: string,
-    sessionState: string,
+    sessionState: SessionState,
     genreCode: string | null,
+    createdAt: string,
+    updatedAt: string,
+    singers:  {
+      __typename: "ModelSingerConnection",
+      items:  Array< {
+        __typename: "Singer",
+        id: string,
+        name: string,
+        partysessionID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -250,7 +509,21 @@ export type OnDeletePartySessionSubscription = {
     id: string,
     city: string,
     sessionStartTime: string,
-    sessionState: string,
+    sessionState: SessionState,
     genreCode: string | null,
+    createdAt: string,
+    updatedAt: string,
+    singers:  {
+      __typename: "ModelSingerConnection",
+      items:  Array< {
+        __typename: "Singer",
+        id: string,
+        name: string,
+        partysessionID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
   } | null,
 };

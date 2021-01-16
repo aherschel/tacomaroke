@@ -1,3 +1,3 @@
 export const isAuthEnabled = false;
-export const isGroupPlayEnabled = false;
+export const isGroupPlayEnabled = true;
 export const isPartyListEnabled = true;

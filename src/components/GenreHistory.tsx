@@ -26,8 +26,8 @@ const GenreHistory = (props: GenreHistoryProps) => {
         <>
           <h3>Previous Genres</h3>
           <ol>
-            {latestGenreNames.map((latestGenreName) => (
-              <li>{latestGenreName}</li>
+            {latestGenreNames.map((latestGenreName, i) => (
+              <li key={i.toString()}>{latestGenreName}</li>
             ))}
           </ol>
         </>

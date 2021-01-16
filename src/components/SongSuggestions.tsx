@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Spinner } from "react-bootstrap";
+import Skeleton from "react-loading-skeleton";
 import genreClient from "../api/GenreClient";
 import { Genre, Track } from "../api/genres";
+import sleep from "../util/PromiseUtils";
 
 interface SongSuggestionsProps {
   genre: Genre;
@@ -9,64 +10,42 @@ interface SongSuggestionsProps {
 
 const SongSuggestions = (props: SongSuggestionsProps) => {
   const { genre } = props;
-  const [tracks, setTracks] = useState<Track[] | undefined>();
-  const [showSpinner, setShowSpinner] = useState(false);
+  const [tracks, setTracks] = useState<Track[] | undefined>([]);
 
   useEffect(() => {
-    const loadTracks = async (tag?: string) => {
-      if (tag) {
-        setShowSpinner(true);
-        const newTracks = await genreClient.getSongsForTag(tag);
+    const loadTracks = async () => {
+      if (genre.tag) {
+        setTracks(undefined);
+        // Introduce 0.5s minimum delay, this is mostly to keep the skeleton from looking too crazy.
+        const [newTracks] = await Promise.all([
+          genreClient.getSongsForTag(genre.tag),
+          sleep(500),
+        ]);
         setTracks(newTracks);
-        setShowSpinner(false);
+      } else if (genre.tracks) {
+        setTracks(genre.tracks);
       } else {
         setTracks([]);
       }
     };
-    loadTracks(genre.tag);
+    loadTracks();
   }, [genre]);
 
-  if (showSpinner) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="sr-only">Loading...</span>
-      </Spinner>
-    );
-  }
-
-  if (genre.tag && tracks && tracks.length !== 0) {
-    return (
-      <div>
-        <h3>Song Suggestions</h3>
-        <ol>
-          {tracks.map((track) => (
-            <li>
+  return (
+    <div>
+      <h3>Song Suggestions</h3>
+      <ol>
+        {(tracks &&
+          tracks.map((track) => (
+            <li key={`${track.name}-${track.url}`}>
               <a target="_blank" rel="noopener noreferrer" href={track.url}>
                 {track.name}
               </a>
             </li>
-          ))}
-        </ol>
-      </div>
-    );
-  }
-
-  if (genre.tracks) {
-    return (
-      <div>
-        <h3>Song Suggestions</h3>
-        <ol>
-          {genre.tracks.map((track) => (
-            <li>
-              <a href={track.url}>{track.name}</a>
-            </li>
-          ))}
-        </ol>
-      </div>
-    );
-  }
-
-  return null;
+          ))) || <Skeleton count={50} />}
+      </ol>
+    </div>
+  );
 };
 
 export default SongSuggestions;
