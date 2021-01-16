@@ -6,7 +6,7 @@ Tacomaroke is a website which help you find songs to sing tacomaroke. This is th
 
 ## Start development
 
-1. Install the [Amplify CLI](https://docs.amplify.aws/cli/start/install), Yarn, NPM, and Git
+1. Install the [Amplify CLI](https://docs.amplify.aws/cli/start/install), Yarn, Node, and Git
 1. Pull down this source code, and run `yarn install`
 1. You'll need amplify configured to your account, then run `amplify pull`, if you're moving to a new account you'll need to run either  `amplify push` or `amplify env import` depending on the usecase.
 1. Start the dev server with `yarn start`.
