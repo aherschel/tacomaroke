@@ -1,6 +1,7 @@
 import { API, graphqlOperation } from "aws-amplify";
 import {
   CreatePartySessionMutationVariables,
+  CreateSingerMutationVariables,
   GetPartySessionQueryVariables,
   ListPartySessionsQueryVariables,
   ModelSortDirection,
@@ -8,7 +9,7 @@ import {
   SessionState,
   UpdatePartySessionMutationVariables,
 } from "../API";
-import { createPartySession, updatePartySession } from "../graphql/mutations";
+import { createPartySession, createSinger, updatePartySession } from "../graphql/mutations";
 import {
   getPartySession,
   listPartySessions,
@@ -36,12 +37,27 @@ class PartyClient {
     return response.data.listPartySessions.items;
   };
 
+  addSinger = async (partysessionID: string, name: string): Promise<Party> => {
+    const mutation: CreateSingerMutationVariables = {
+      input: {
+        name,
+        partysessionID,
+        expirationTimestamp: Math.round(Date.now() / 1000) + 2 * 60 * 60,
+      },
+    };
+    const response = await API.graphql(
+      graphqlOperation(createSinger, mutation)
+    );
+    return response.data.createSinger;
+  };
+
   createParty = async (): Promise<Party> => {
     const mutation: CreatePartySessionMutationVariables = {
       input: {
         city: this.getRandomCity(),
         sessionStartTime: new Date().toISOString(),
         sessionState: SessionState.CREATING,
+        expirationTimestamp: Math.round(Date.now() / 1000) + 2 * 60 * 60,
       },
     };
     const response = await API.graphql(

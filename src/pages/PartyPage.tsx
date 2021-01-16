@@ -35,7 +35,7 @@ const PartyPage = () => {
                 setState("Host");
               }}
             >
-              Start Party
+              Create a Party
             </Button>
           </Col>
           <Col>
@@ -45,7 +45,7 @@ const PartyPage = () => {
                 setState("Attendee");
               }}
             >
-              Join Party
+              Join a Party
             </Button>
           </Col>
           <Col />

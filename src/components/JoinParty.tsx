@@ -22,6 +22,7 @@ const JoinParty = () => {
   const [componentState, setState] = useState<ComponentState>("NotStarted");
   const [isLoading, setLoading] = useState(true);
   const [openParties, setOpenParties] = useState<Party[] | undefined>();
+  const [name, setName] = useState("");
 
   useEffect(() => {
     const loadParties = async () => {
@@ -74,6 +75,7 @@ const JoinParty = () => {
   const onPartySelected = async (partyId: string) => {
     setState("Joining");
     try {
+      await partyClient.addSinger(partyId, name);
       const party = await partyClient.joinPartyById(partyId);
       console.log(`Joined party: ${JSON.stringify(party)}`);
       setJoinedParty(party);
@@ -82,6 +84,10 @@ const JoinParty = () => {
       console.error(`Failed to join party ${partyName}, caught: ${e.message}`);
       setState("Failed");
     }
+  };
+
+  const onNameChange = (event: any) => {
+    setName(event.target.value);
   };
 
   if (isLoading) {
@@ -128,9 +134,20 @@ const JoinParty = () => {
             <>
               <br />
               <h3>Select a party to join below.</h3>
+              <InputGroup className="mb-3">
+                <FormControl
+                  type="text"
+                  minLength={3}
+                  maxLength={18}
+                  placeholder="Name"
+                  aria-label="Username"
+                  onChange={onNameChange}
+                />
+              </InputGroup>
               <PartyList
                 parties={openParties}
                 onPartySelected={onPartySelected}
+                disabled={name.length < 3 || name.length > 18}
               />
             </>
           )}

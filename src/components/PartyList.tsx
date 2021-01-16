@@ -5,6 +5,7 @@ import { Party } from "../api/PartyClient";
 type PartyListProps = {
   parties: Party[];
   onPartySelected: (partyId: string) => void;
+  disabled: boolean;
 };
 
 interface CityMap {
@@ -16,7 +17,7 @@ const buttonStyle = {
 };
 
 const PartyList = (props: PartyListProps) => {
-  const { parties, onPartySelected } = props;
+  const { parties, onPartySelected, disabled } = props;
 
   const sortedParties = parties
     .slice()
@@ -47,6 +48,7 @@ const PartyList = (props: PartyListProps) => {
                 onClick={() => {
                   onPartySelected(party.id);
                 }}
+                disabled={disabled}
               >
                 Join {party.city}-roke
               </Button>

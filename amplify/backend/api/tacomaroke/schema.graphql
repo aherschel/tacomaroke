@@ -2,6 +2,7 @@ type Singer @model @auth(rules: [{allow: public}]) @key(name: "byPartySession", 
   id: ID!
   name: String!
   partysessionID: ID!
+  expirationTimestamp: AWSTimestamp! @ttl
 }
 
 enum SessionState {
@@ -15,7 +16,8 @@ type PartySession @model @key(fields: ["city", "sessionStartTime"], name: "cityB
   city: String!
   sessionStartTime: String!
   sessionState: SessionState!
-  genreCode: String
+  genreCode: String,
+  expirationTimestamp: AWSTimestamp! @ttl
   singers: [Singer] @connection(keyName: "byPartySession", fields: ["id"])
 }
  

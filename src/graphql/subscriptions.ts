@@ -8,6 +8,7 @@ export const onCreateSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      expirationTimestamp
       createdAt
       updatedAt
     }
@@ -19,6 +20,7 @@ export const onUpdateSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      expirationTimestamp
       createdAt
       updatedAt
     }
@@ -30,6 +32,7 @@ export const onDeleteSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      expirationTimestamp
       createdAt
       updatedAt
     }
@@ -43,6 +46,7 @@ export const onCreatePartySession = /* GraphQL */ `
       sessionStartTime
       sessionState
       genreCode
+      expirationTimestamp
       createdAt
       updatedAt
       singers {
@@ -50,6 +54,7 @@ export const onCreatePartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          expirationTimestamp
           createdAt
           updatedAt
         }
@@ -66,6 +71,7 @@ export const onUpdatePartySession = /* GraphQL */ `
       sessionStartTime
       sessionState
       genreCode
+      expirationTimestamp
       createdAt
       updatedAt
       singers {
@@ -73,6 +79,7 @@ export const onUpdatePartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          expirationTimestamp
           createdAt
           updatedAt
         }
@@ -89,6 +96,7 @@ export const onDeletePartySession = /* GraphQL */ `
       sessionStartTime
       sessionState
       genreCode
+      expirationTimestamp
       createdAt
       updatedAt
       singers {
@@ -96,6 +104,7 @@ export const onDeletePartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          expirationTimestamp
           createdAt
           updatedAt
         }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { Party, partyClient } from "../api/PartyClient";
 import CreateParty from "./CreateParty";
 import GenreController from "./GenreController";
@@ -8,6 +8,7 @@ const HostParty = () => {
   const [createdPartySession, setPartySession] = useState<Party | undefined>(
     undefined
   );
+  const [name, setName] = useState("");
   const [isPartyStarted, setPartyStarted] = useState(false);
 
   useEffect(() => {
@@ -26,9 +27,14 @@ const HostParty = () => {
   };
 
   const onStartClicked = async (partySession: Party) => {
+    await partyClient.addSinger(partySession.id, name);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await partyClient.startParty(partySession.id!!);
     setPartyStarted(true);
+  };
+
+  const onNameChange = (event: any) => {
+    setName(event.target.value);
   };
 
   if (!createdPartySession) {
@@ -44,7 +50,20 @@ const HostParty = () => {
           Once your party members have all joined, kick it off by clicking
           &lsquo;Start Party!&rsquo; below.
         </p>
-        <Button onClick={() => onStartClicked(createdPartySession)}>
+        <InputGroup className="mb-3">
+          <FormControl
+            type="text"
+            minLength={3}
+            maxLength={18}
+            placeholder="Name"
+            aria-label="Username"
+            onChange={onNameChange}
+          />
+        </InputGroup>
+        <Button
+          onClick={() => onStartClicked(createdPartySession)}
+          disabled={name.length < 3 || name.length > 18}
+        >
           Start Party!
         </Button>
       </>

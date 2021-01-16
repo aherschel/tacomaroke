@@ -8,6 +8,7 @@
     "bootstrap": "^4.4.1",
     "dot-prop": "^5.1.1",
     "eslint": "^6.6.0",
+    "graphql-ttl-transformer": "^1.1.0",
     "guid-typescript": "^1.0.9",
     "interactjs": "^1.9.18",
     "lodash": "^4.17.19",
