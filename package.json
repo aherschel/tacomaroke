@@ -52,7 +52,9 @@
     "lodash.template": "^4.5.0",
     "kind-of": "^6.0.3",
     "websocket-extensions": "^0.1.4",
-    "dot-prop": "^5.1.1"
+    "dot-prop": "^5.1.1",
+    "axios": "^0.21.1",
+    "node-notifier": "^8.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
