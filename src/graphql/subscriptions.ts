@@ -2,6 +2,18 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateSingerByPartySessionId = /* GraphQL */ `
+  subscription OnCreateSingerByPartySessionId($partysessionID: String!) {
+    onCreateSingerByPartySessionId(partysessionID: $partysessionID) {
+      id
+      name
+      partysessionID
+      expirationTimestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateSinger = /* GraphQL */ `
   subscription OnCreateSinger {
     onCreateSinger {

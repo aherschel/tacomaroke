@@ -3,6 +3,7 @@ import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { Party, partyClient } from "../api/PartyClient";
 import CreateParty from "./CreateParty";
 import GenreController from "./GenreController";
+import SingerList from "./SingerList";
 
 const HostParty = () => {
   const [createdPartySession, setPartySession] = useState<Party | undefined>(
@@ -74,6 +75,7 @@ const HostParty = () => {
       <br />
       <h3>Started party {createdPartySession.city}-roke</h3>
       <p>The genres you select below will be visible to all party members.</p>
+      <SingerList partySessionID={createdPartySession.id} />
       <GenreController isController remoteParty={createdPartySession} />
     </>
   );

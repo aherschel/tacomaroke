@@ -455,6 +455,22 @@ export type PartySessionCityByStartTimeQuery = {
   } | null,
 };
 
+export type OnCreateSingerByPartySessionIdSubscriptionVariables = {
+  partysessionID: string,
+};
+
+export type OnCreateSingerByPartySessionIdSubscription = {
+  onCreateSingerByPartySessionId:  {
+    __typename: "Singer",
+    id: string,
+    name: string,
+    partysessionID: string,
+    expirationTimestamp: number,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreateSingerSubscription = {
   onCreateSinger:  {
     __typename: "Singer",
