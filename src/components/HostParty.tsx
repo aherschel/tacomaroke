@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { partyClient, Party } from "../api/PartyClient";
+import { Party, partyClient } from "../api/PartyClient";
 import CreateParty from "./CreateParty";
 import GenreController from "./GenreController";
 
@@ -11,6 +11,8 @@ const HostParty = () => {
   const [isPartyStarted, setPartyStarted] = useState(false);
 
   useEffect(() => {
+    // This seems to be incorrectly firing on start, which isn't the goal.
+    // It doesn't cause any bugs yet, but should be looked at.
     return () => {
       if (createdPartySession) {
         partyClient.endParty(createdPartySession.id);

@@ -8,7 +8,7 @@ import {
   Button,
   Spinner,
 } from "react-bootstrap";
-import { partyClient, Party } from "../api/PartyClient";
+import { Party, partyClient } from "../api/PartyClient";
 import { isPartyListEnabled } from "../FeatureFlags";
 import { onCreatePartySession } from "../graphql/subscriptions";
 import GenreController from "./GenreController";

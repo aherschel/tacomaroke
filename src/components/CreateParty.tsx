@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Spinner } from "react-bootstrap";
-import { partyClient, Party } from "../api/PartyClient";
+import { Party, partyClient } from "../api/PartyClient";
 
 interface CreatePartyProps {
   onPartyCreated: (party: Party) => void;

@@ -1,57 +1,112 @@
-// tslint:disable
+/* tslint:disable */
+/* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getPartySession = `query GetPartySession($id: ID!) {
-  getPartySession(id: $id) {
-    id
-    city
-    sessionStartTime
-    sessionState
-    genreCode
-  }
-}
-`;
-export const listPartySessions = `query ListPartySessions(
-  $filter: ModelPartySessionFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listPartySessions(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
+export const getSinger = /* GraphQL */ `
+  query GetSinger($id: ID!) {
+    getSinger(id: $id) {
       id
-      city
-      sessionStartTime
-      sessionState
-      genreCode
+      name
+      partysessionID
+      createdAt
+      updatedAt
     }
-    nextToken
   }
-}
 `;
-export const partySessionCityByStartTime = `query PartySessionCityByStartTime(
-  $city: String
-  $sessionStartTime: ModelStringKeyConditionInput
-  $sortDirection: ModelSortDirection
-  $filter: ModelPartySessionFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  partySessionCityByStartTime(
-    city: $city
-    sessionStartTime: $sessionStartTime
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
+export const listSingers = /* GraphQL */ `
+  query ListSingers(
+    $filter: ModelSingerFilterInput
+    $limit: Int
+    $nextToken: String
   ) {
-    items {
+    listSingers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        partysessionID
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getPartySession = /* GraphQL */ `
+  query GetPartySession($id: ID!) {
+    getPartySession(id: $id) {
       id
       city
       sessionStartTime
       sessionState
       genreCode
+      createdAt
+      updatedAt
+      singers {
+        items {
+          id
+          name
+          partysessionID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
     }
-    nextToken
   }
-}
+`;
+export const listPartySessions = /* GraphQL */ `
+  query ListPartySessions(
+    $filter: ModelPartySessionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPartySessions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        city
+        sessionStartTime
+        sessionState
+        genreCode
+        createdAt
+        updatedAt
+        singers {
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const partySessionCityByStartTime = /* GraphQL */ `
+  query PartySessionCityByStartTime(
+    $city: String
+    $sessionStartTime: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPartySessionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    partySessionCityByStartTime(
+      city: $city
+      sessionStartTime: $sessionStartTime
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        city
+        sessionStartTime
+        sessionState
+        genreCode
+        createdAt
+        updatedAt
+        singers {
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
 `;

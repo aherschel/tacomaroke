@@ -5,6 +5,7 @@ import {
   ListPartySessionsQueryVariables,
   ModelSortDirection,
   PartySessionCityByStartTimeQueryVariables,
+  SessionState,
   UpdatePartySessionMutationVariables,
 } from "../API";
 import { createPartySession, updatePartySession } from "../graphql/mutations";
@@ -14,8 +15,6 @@ import {
   partySessionCityByStartTime,
 } from "../graphql/queries";
 import cities from "./cities";
-
-export type SessionState = "Creating" | "InProgress" | "Ended";
 
 export type Party = {
   id: string;
@@ -29,7 +28,7 @@ export type Party = {
 class PartyClient {
   listParties = async (): Promise<Party[]> => {
     const mutation: ListPartySessionsQueryVariables = {
-      filter: { sessionState: { eq: "Creating" } },
+      filter: { sessionState: { eq: SessionState.CREATING } },
     };
     const response = await API.graphql(
       graphqlOperation(listPartySessions, mutation)
@@ -42,7 +41,7 @@ class PartyClient {
       input: {
         city: this.getRandomCity(),
         sessionStartTime: new Date().toISOString(),
-        sessionState: "Creating",
+        sessionState: SessionState.CREATING,
       },
     };
     const response = await API.graphql(
@@ -55,7 +54,7 @@ class PartyClient {
     const mutation: UpdatePartySessionMutationVariables = {
       input: {
         id: partyId,
-        sessionState: "InProgress",
+        sessionState: SessionState.INPROGRESS,
       },
     };
     await API.graphql(graphqlOperation(updatePartySession, mutation));
@@ -65,7 +64,7 @@ class PartyClient {
     const mutation: UpdatePartySessionMutationVariables = {
       input: {
         id: partyId,
-        sessionState: "Ended",
+        sessionState: SessionState.ENDED,
       },
     };
     await API.graphql(graphqlOperation(updatePartySession, mutation));
@@ -78,7 +77,7 @@ class PartyClient {
         genreCode,
       },
     };
-    return API.graphql(graphqlOperation(updatePartySession, mutation));
+    await API.graphql(graphqlOperation(updatePartySession, mutation));
   };
 
   joinPartyByName = async (city: string): Promise<Party> => {
@@ -91,7 +90,10 @@ class PartyClient {
       graphqlOperation(partySessionCityByStartTime, mutation)
     );
     const parties: Party[] = response.data.partySessionCityByStartTime.items;
-    if (parties.length === 1 && parties[0].sessionState === "Creating") {
+    if (
+      parties.length === 1 &&
+      parties[0].sessionState === SessionState.CREATING
+    ) {
       return parties[0];
     }
     throw new Error(
@@ -105,7 +107,7 @@ class PartyClient {
       graphqlOperation(getPartySession, mutation)
     );
     const party: Party = response.data.getPartySession;
-    if (party && party.sessionState === "Creating") {
+    if (party && party.sessionState === SessionState.CREATING) {
       return party;
     }
     throw new Error("Expected to find party that was being created.");
@@ -115,4 +117,5 @@ class PartyClient {
     cities[Math.floor(Math.random() * cities.length)];
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export const partyClient = new PartyClient();
