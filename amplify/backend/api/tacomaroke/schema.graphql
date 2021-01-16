@@ -20,4 +20,8 @@ type PartySession @model @key(fields: ["city", "sessionStartTime"], name: "cityB
   expirationTimestamp: AWSTimestamp! @ttl
   singers: [Singer] @connection(keyName: "byPartySession", fields: ["id"])
 }
- 
+
+type Subscription {
+  onCreateSingerByPartySessionId(partysessionID: String!): Singer
+    @aws_subscribe(mutations: ["createSinger"])
+}

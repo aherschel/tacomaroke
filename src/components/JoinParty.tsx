@@ -13,6 +13,7 @@ import { isPartyListEnabled } from "../FeatureFlags";
 import { onCreatePartySession } from "../graphql/subscriptions";
 import GenreController from "./GenreController";
 import PartyList from "./PartyList";
+import SingerList from "./SingerList";
 
 type ComponentState = "NotStarted" | "Joining" | "Joined" | "Failed";
 
@@ -172,6 +173,7 @@ const JoinParty = () => {
             The party creator will be able to select new genres, which will show
             up below.
           </p>
+          <SingerList partySessionID={joinedParty?.id} />
           <GenreController isController={false} remoteParty={joinedParty} />
         </>
       );

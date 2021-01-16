@@ -9,7 +9,11 @@ import {
   SessionState,
   UpdatePartySessionMutationVariables,
 } from "../API";
-import { createPartySession, createSinger, updatePartySession } from "../graphql/mutations";
+import {
+  createPartySession,
+  createSinger,
+  updatePartySession,
+} from "../graphql/mutations";
 import {
   getPartySession,
   listPartySessions,
@@ -17,22 +21,31 @@ import {
 } from "../graphql/queries";
 import cities from "./cities";
 
+export type SingerList = {
+  items: Singer[];
+};
+
+export type Singer = {
+  id: string;
+  name: string;
+};
+
 export type Party = {
   id: string;
   city: string;
   sessionStartTime: string;
   sessionState: string;
   genreCode: string | null;
-  owner: string | null;
+  singers: SingerList;
 };
 
 class PartyClient {
   listParties = async (): Promise<Party[]> => {
-    const mutation: ListPartySessionsQueryVariables = {
+    const query: ListPartySessionsQueryVariables = {
       filter: { sessionState: { eq: SessionState.CREATING } },
     };
     const response = await API.graphql(
-      graphqlOperation(listPartySessions, mutation)
+      graphqlOperation(listPartySessions, query)
     );
     return response.data.listPartySessions.items;
   };
@@ -42,7 +55,7 @@ class PartyClient {
       input: {
         name,
         partysessionID,
-        expirationTimestamp: Math.round(Date.now() / 1000) + 2 * 60 * 60,
+        expirationTimestamp: Math.round(Date.now() / 1000) + 60 * 60,
       },
     };
     const response = await API.graphql(
@@ -57,7 +70,7 @@ class PartyClient {
         city: this.getRandomCity(),
         sessionStartTime: new Date().toISOString(),
         sessionState: SessionState.CREATING,
-        expirationTimestamp: Math.round(Date.now() / 1000) + 2 * 60 * 60,
+        expirationTimestamp: Math.round(Date.now() / 1000) + 60 * 60,
       },
     };
     const response = await API.graphql(
@@ -97,13 +110,13 @@ class PartyClient {
   };
 
   joinPartyByName = async (city: string): Promise<Party> => {
-    const mutation: PartySessionCityByStartTimeQueryVariables = {
+    const query: PartySessionCityByStartTimeQueryVariables = {
       city,
       sortDirection: ModelSortDirection.DESC,
       limit: 1,
     };
     const response = await API.graphql(
-      graphqlOperation(partySessionCityByStartTime, mutation)
+      graphqlOperation(partySessionCityByStartTime, query)
     );
     const parties: Party[] = response.data.partySessionCityByStartTime.items;
     if (
