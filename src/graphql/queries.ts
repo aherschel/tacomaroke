@@ -8,6 +8,8 @@ export const getSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      votes
+      hearts
       expirationTimestamp
       createdAt
       updatedAt
@@ -25,6 +27,8 @@ export const listSingers = /* GraphQL */ `
         id
         name
         partysessionID
+        votes
+        hearts
         expirationTimestamp
         createdAt
         updatedAt
@@ -49,6 +53,8 @@ export const getPartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          votes
+          hearts
           expirationTimestamp
           createdAt
           updatedAt

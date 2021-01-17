@@ -2,6 +2,8 @@ type Singer @model @auth(rules: [{allow: public}]) @key(name: "byPartySession", 
   id: ID!
   name: String!
   partysessionID: ID!
+  votes: Int!
+  hearts: Int!
   expirationTimestamp: AWSTimestamp! @ttl
 }
 
@@ -24,4 +26,6 @@ type PartySession @model @key(fields: ["city", "sessionStartTime"], name: "cityB
 type Subscription {
   onCreateSingerByPartySessionId(partysessionID: String!): Singer
     @aws_subscribe(mutations: ["createSinger"])
+  onUpdateSingerById(id: String!): Singer
+    @aws_subscribe(mutations: ["updateSinger"])
 }

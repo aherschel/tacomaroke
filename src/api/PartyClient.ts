@@ -8,11 +8,13 @@ import {
   PartySessionCityByStartTimeQueryVariables,
   SessionState,
   UpdatePartySessionMutationVariables,
+  UpdateSingerMutationVariables,
 } from "../API";
 import {
   createPartySession,
   createSinger,
   updatePartySession,
+  updateSinger,
 } from "../graphql/mutations";
 import {
   getPartySession,
@@ -21,13 +23,11 @@ import {
 } from "../graphql/queries";
 import cities from "./cities";
 
-export type SingerList = {
-  items: Singer[];
-};
-
 export type Singer = {
   id: string;
   name: string;
+  hearts: number;
+  votes: number;
 };
 
 export type Party = {
@@ -36,7 +36,6 @@ export type Party = {
   sessionStartTime: string;
   sessionState: string;
   genreCode: string | null;
-  singers: SingerList;
 };
 
 class PartyClient {
@@ -55,6 +54,8 @@ class PartyClient {
       input: {
         name,
         partysessionID,
+        votes: 0,
+        hearts: 0,
         expirationTimestamp: Math.round(Date.now() / 1000) + 60 * 60,
       },
     };
@@ -62,6 +63,40 @@ class PartyClient {
       graphqlOperation(createSinger, mutation)
     );
     return response.data.createSinger;
+  };
+
+  addHeart = async (singer: Singer): Promise<void> => {
+    const mutation: UpdateSingerMutationVariables = {
+      input: {
+        id: singer.id,
+        hearts: singer.hearts + 1,
+      },
+      condition: {
+        hearts: { eq: singer.hearts },
+      },
+    };
+    try {
+      await API.graphql(graphqlOperation(updateSinger, mutation));
+    } catch (e) {
+      console.error(JSON.stringify(e));
+    }
+  };
+
+  addVote = async (singer: Singer): Promise<void> => {
+    const mutation: UpdateSingerMutationVariables = {
+      input: {
+        id: singer.id,
+        votes: singer.votes + 1,
+      },
+      condition: {
+        votes: { eq: singer.votes },
+      },
+    };
+    try {
+      await API.graphql(graphqlOperation(updateSinger, mutation));
+    } catch (e) {
+      console.error(JSON.stringify(e));
+    }
   };
 
   createParty = async (): Promise<Party> => {

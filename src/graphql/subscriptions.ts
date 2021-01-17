@@ -8,6 +8,22 @@ export const onCreateSingerByPartySessionId = /* GraphQL */ `
       id
       name
       partysessionID
+      votes
+      hearts
+      expirationTimestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateSingerById = /* GraphQL */ `
+  subscription OnUpdateSingerById($id: String!) {
+    onUpdateSingerById(id: $id) {
+      id
+      name
+      partysessionID
+      votes
+      hearts
       expirationTimestamp
       createdAt
       updatedAt
@@ -20,6 +36,8 @@ export const onCreateSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      votes
+      hearts
       expirationTimestamp
       createdAt
       updatedAt
@@ -32,6 +50,8 @@ export const onUpdateSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      votes
+      hearts
       expirationTimestamp
       createdAt
       updatedAt
@@ -44,6 +64,8 @@ export const onDeleteSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      votes
+      hearts
       expirationTimestamp
       createdAt
       updatedAt
@@ -66,6 +88,8 @@ export const onCreatePartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          votes
+          hearts
           expirationTimestamp
           createdAt
           updatedAt
@@ -91,6 +115,8 @@ export const onUpdatePartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          votes
+          hearts
           expirationTimestamp
           createdAt
           updatedAt
@@ -116,6 +142,8 @@ export const onDeletePartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          votes
+          hearts
           expirationTimestamp
           createdAt
           updatedAt
