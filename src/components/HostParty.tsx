@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { Party, partyClient } from "../api/PartyClient";
 import CreateParty from "./CreateParty";
@@ -12,25 +12,13 @@ const HostParty = () => {
   const [name, setName] = useState("");
   const [isPartyStarted, setPartyStarted] = useState(false);
 
-  useEffect(() => {
-    // This seems to be incorrectly firing on start, which isn't the goal.
-    // It doesn't cause any bugs yet, but should be looked at.
-    return () => {
-      if (createdPartySession) {
-        partyClient.endParty(createdPartySession.id);
-      }
-    };
-  });
-
   const onPartyCreated = (partySession: Party) => {
-    console.log(`Party Created ${JSON.stringify(partySession)}`);
     setPartySession(partySession);
   };
 
   const onStartClicked = async (partySession: Party) => {
     await partyClient.addSinger(partySession.id, name);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await partyClient.startParty(partySession.id!!);
+    await partyClient.startParty(partySession.id);
     setPartyStarted(true);
   };
 
@@ -51,6 +39,7 @@ const HostParty = () => {
           Once your party members have all joined, kick it off by clicking
           &lsquo;Start Party!&rsquo; below.
         </p>
+        <SingerList partySessionID={createdPartySession.id} />
         <InputGroup className="mb-3">
           <FormControl
             type="text"

@@ -4,6 +4,7 @@ import { ListSingersQueryVariables } from "../API";
 import { Singer } from "../api/PartyClient";
 import { listSingers } from "../graphql/queries";
 import { onCreateSingerByPartySessionId } from "../graphql/subscriptions";
+import VoteInput from "./VoteInput";
 
 interface SingerListProps {
   partySessionID: string | undefined;
@@ -32,11 +33,12 @@ const SingerList = (props: SingerListProps) => {
     ).subscribe({
       next: (data: any) => {
         const singer = data.value.data.onCreateSingerByPartySessionId;
-        if (singers) {
-          setSingers([...singers, singer]);
-        } else {
-          setSingers([singer]);
-        }
+        setSingers((oldSingers) => {
+          if (oldSingers) {
+            return [...oldSingers, singer];
+          }
+          return [singer];
+        });
       },
     });
 
@@ -45,17 +47,19 @@ const SingerList = (props: SingerListProps) => {
         subscription.unsubscribe();
       }
     };
-  }, [partySessionID, singers]);
+  }, [partySessionID]);
 
   if (singers) {
     return (
       <div>
         <h3>Singers</h3>
-        <ol>
+        <ul>
           {singers.map((singer) => (
-            <li key={singer.id}>{singer.name}</li>
+            <li key={singer.id}>
+              {singer.name} <VoteInput singer={singer} />
+            </li>
           ))}
-        </ol>
+        </ul>
       </div>
     );
   }

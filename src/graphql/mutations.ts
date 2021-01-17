@@ -11,6 +11,8 @@ export const createSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      votes
+      hearts
       expirationTimestamp
       createdAt
       updatedAt
@@ -26,6 +28,8 @@ export const updateSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      votes
+      hearts
       expirationTimestamp
       createdAt
       updatedAt
@@ -41,6 +45,8 @@ export const deleteSinger = /* GraphQL */ `
       id
       name
       partysessionID
+      votes
+      hearts
       expirationTimestamp
       createdAt
       updatedAt
@@ -66,6 +72,8 @@ export const createPartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          votes
+          hearts
           expirationTimestamp
           createdAt
           updatedAt
@@ -94,6 +102,8 @@ export const updatePartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          votes
+          hearts
           expirationTimestamp
           createdAt
           updatedAt
@@ -122,6 +132,8 @@ export const deletePartySession = /* GraphQL */ `
           id
           name
           partysessionID
+          votes
+          hearts
           expirationTimestamp
           createdAt
           updatedAt
