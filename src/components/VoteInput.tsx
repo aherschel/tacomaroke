@@ -1,35 +1,14 @@
-import { API, graphqlOperation } from "aws-amplify";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Badge, Button } from "react-bootstrap";
-import { partyClient, Singer } from "../api/PartyClient";
-import { onUpdateSingerById } from "../graphql/subscriptions";
+import { partyClient, Party, Singer } from "../api/PartyClient";
 
 interface VoteInputProps {
+  party: Party;
   singer: Singer;
 }
 
 const VoteInput = (props: VoteInputProps) => {
-  const { singer: singerIn } = props;
-  const [singer, setSinger] = useState(singerIn);
-
-  useEffect(() => {
-    const subscription = API.graphql(
-      graphqlOperation(onUpdateSingerById, {
-        id: singer.id,
-      })
-    ).subscribe({
-      next: (data: any) => {
-        const updatedSinger = data.value.data.onUpdateSingerById;
-        setSinger(updatedSinger);
-      },
-    });
-
-    return () => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
-    };
-  }, [singer.id]);
+  const { party, singer } = props;
 
   return (
     <span>
@@ -37,7 +16,7 @@ const VoteInput = (props: VoteInputProps) => {
         className="rounded-pill"
         variant="secondary"
         size="sm"
-        onClick={() => partyClient.addVote(singer)}
+        onClick={() => partyClient.addVote(party, singer)}
       >
         <span role="img" aria-label="add-heart">
           🗳️
@@ -52,7 +31,7 @@ const VoteInput = (props: VoteInputProps) => {
         className="rounded-pill"
         variant="secondary"
         size="sm"
-        onClick={() => partyClient.addHeart(singer)}
+        onClick={() => partyClient.addHeart(party, singer)}
       >
         <span role="img" aria-label="add-heart">
           ❤️

@@ -2,57 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createSinger = /* GraphQL */ `
-  mutation CreateSinger(
-    $input: CreateSingerInput!
-    $condition: ModelSingerConditionInput
-  ) {
-    createSinger(input: $input, condition: $condition) {
-      id
-      name
-      partysessionID
-      votes
-      hearts
-      expirationTimestamp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateSinger = /* GraphQL */ `
-  mutation UpdateSinger(
-    $input: UpdateSingerInput!
-    $condition: ModelSingerConditionInput
-  ) {
-    updateSinger(input: $input, condition: $condition) {
-      id
-      name
-      partysessionID
-      votes
-      hearts
-      expirationTimestamp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteSinger = /* GraphQL */ `
-  mutation DeleteSinger(
-    $input: DeleteSingerInput!
-    $condition: ModelSingerConditionInput
-  ) {
-    deleteSinger(input: $input, condition: $condition) {
-      id
-      name
-      partysessionID
-      votes
-      hearts
-      expirationTimestamp
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const createPartySession = /* GraphQL */ `
   mutation CreatePartySession(
     $input: CreatePartySessionInput!
@@ -63,23 +12,17 @@ export const createPartySession = /* GraphQL */ `
       city
       sessionStartTime
       sessionState
-      genreCode
+      rounds {
+        genreCode
+      }
+      singers {
+        name
+        votes
+        hearts
+      }
       expirationTimestamp
       createdAt
       updatedAt
-      singers {
-        items {
-          id
-          name
-          partysessionID
-          votes
-          hearts
-          expirationTimestamp
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -93,23 +36,17 @@ export const updatePartySession = /* GraphQL */ `
       city
       sessionStartTime
       sessionState
-      genreCode
+      rounds {
+        genreCode
+      }
+      singers {
+        name
+        votes
+        hearts
+      }
       expirationTimestamp
       createdAt
       updatedAt
-      singers {
-        items {
-          id
-          name
-          partysessionID
-          votes
-          hearts
-          expirationTimestamp
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -123,23 +60,17 @@ export const deletePartySession = /* GraphQL */ `
       city
       sessionStartTime
       sessionState
-      genreCode
+      rounds {
+        genreCode
+      }
+      singers {
+        name
+        votes
+        hearts
+      }
       expirationTimestamp
       createdAt
       updatedAt
-      singers {
-        items {
-          id
-          name
-          partysessionID
-          votes
-          hearts
-          expirationTimestamp
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;
