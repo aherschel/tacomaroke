@@ -1,109 +1,131 @@
-import React, { useState } from "react";
-import {
-  Collapse,
-  Jumbotron,
-  Container,
-  Row,
-  Col,
-  Button,
-} from "react-bootstrap";
-import HostParty from "../components/HostParty";
-import JoinParty from "../components/JoinParty";
-
-type PartyState = "NotStarted" | "Host" | "Attendee";
+import { API, graphqlOperation } from "aws-amplify";
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import { SessionState } from "../API";
+import { Party, partyClient } from "../api/PartyClient";
+import CreateOrJoinParty from "../components/CreateOrJoinParty";
+import PartyLobby from "../components/PartyLobby";
+import PartyPlay from "../components/PartyPlay";
+import { onUpdatePartySessionById } from "../graphql/subscriptions";
 
 const PartyPage = () => {
-  const [partyState, setPartyState] = useState<PartyState>("NotStarted");
-  const [hasStarted, setStarted] = useState(false);
+  const [partyId, setPartyId] = useState<string | undefined>();
+  const [party, setParty] = useState<Party | undefined>();
+  const [isHost, setIsHost] = useState(false);
 
-  const setState = (state: PartyState) => {
-    setPartyState(state);
-    setStarted(true);
+  useEffect(() => {
+    const loadParty = async (updatedPartyId: string) => {
+      const loadedParty = await partyClient.getPartyById(updatedPartyId);
+      setParty(loadedParty);
+    };
+
+    if (partyId) {
+      loadParty(partyId);
+
+      const subscription = API.graphql(
+        graphqlOperation(onUpdatePartySessionById, { id: partyId })
+      ).subscribe({
+        next: (data: any) => {
+          const updatedParty = data.value.data.onUpdatePartySessionById;
+          setParty(updatedParty);
+        },
+      });
+
+      return () => {
+        if (subscription) {
+          subscription.unsubscribe();
+        }
+      };
+    }
+    return undefined;
+  }, [partyId]);
+
+  const onEnterPartyLobby = (newParty: Party, newIsHost: boolean) => {
+    setPartyId(newParty.id);
+    setIsHost(newIsHost);
   };
 
-  let partyView = <div />;
+  const restartButton = (
+    <>
+      <br />
+      <Row>
+        <Col>
+          <Button
+            variant="outline-primary"
+            onClick={() => {
+              setPartyId(undefined);
+              setParty(undefined);
+            }}
+          >
+            Start Over
+          </Button>
+        </Col>
+      </Row>
+    </>
+  );
 
-  if (partyState === "NotStarted") {
-    partyView = (
+  const restartAndEndButtons = (
+    <>
+      <br />
+      <Row>
+        <Col>
+          <Button
+            variant="outline-primary"
+            onClick={() => {
+              setPartyId(undefined);
+              setParty(undefined);
+            }}
+          >
+            Start Over
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            variant="outline-primary"
+            onClick={() => {
+              partyClient.endParty(party!!);
+            }}
+          >
+            End Party
+          </Button>
+        </Col>
+      </Row>
+    </>
+  );
+
+  if (!party) {
+    return (
       <Container fluid>
-        <Row>
-          <Col />
-          <Col>
-            <Button
-              variant="outline-primary"
-              onClick={() => {
-                setState("Host");
-              }}
-            >
-              Create a Party
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              variant="outline-primary"
-              onClick={() => {
-                setState("Attendee");
-              }}
-            >
-              Join a Party
-            </Button>
-          </Col>
-          <Col />
-        </Row>
+        <CreateOrJoinParty onEnterPartyLobby={onEnterPartyLobby} />
       </Container>
-    );
-  } else if (partyState === "Host") {
-    partyView = (
-      <>
-        <Container fluid>
-          <Row>
-            <Button
-              variant="outline-primary"
-              onClick={() => {
-                setState("NotStarted");
-              }}
-            >
-              Start Over
-            </Button>
-          </Row>
-        </Container>
-        <HostParty />
-      </>
-    );
-  } else if (partyState === "Attendee") {
-    partyView = (
-      <>
-        <Container fluid>
-          <Row>
-            <Col>
-              <Button
-                variant="outline-primary"
-                onClick={() => {
-                  setState("NotStarted");
-                }}
-              >
-                Start Over
-              </Button>
-            </Col>
-          </Row>
-        </Container>
-        <JoinParty />
-      </>
     );
   }
 
-  return (
-    <>
-      <br />
-      <Collapse in={!hasStarted}>
-        <Jumbotron>
-          <h1>Party Play</h1>
-          <p>Either Start or join a party!</p>
-        </Jumbotron>
-      </Collapse>
-      {partyView}
-    </>
-  );
+  switch (party.sessionState) {
+    case SessionState.CREATING:
+      return (
+        <Container fluid>
+          {restartButton}
+          <PartyLobby party={party} />
+        </Container>
+      );
+    case SessionState.INPROGRESS:
+      return (
+        <Container fluid>
+          {restartAndEndButtons}
+          <PartyPlay party={party} isHost={isHost} />
+        </Container>
+      );
+    case SessionState.ENDED:
+      return (
+        <Container fluid>
+          {restartButton}
+          <h3>Thank you for playing!</h3>
+        </Container>
+      );
+    default:
+      return <div />;
+  }
 };
 
 export default PartyPage;

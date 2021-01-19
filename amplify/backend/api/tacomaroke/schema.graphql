@@ -1,31 +1,30 @@
-type Singer @model @auth(rules: [{allow: public}]) @key(name: "byPartySession", fields: ["partysessionID"]) {
+type PartySession @model @key(fields: ["city", "sessionStartTime"], name: "cityByStartTime", queryField: "partySessionCityByStartTime") @auth(rules: [{allow: public}]) {
   id: ID!
+  city: String!
+  sessionStartTime: String!
+  sessionState: SessionState!
+  rounds: [Round!]
+  singers: [Singer!]
+  expirationTimestamp: AWSTimestamp! @ttl
+}
+
+type Singer {
   name: String!
-  partysessionID: ID!
   votes: Int!
   hearts: Int!
-  expirationTimestamp: AWSTimestamp! @ttl
+}
+
+type Round {
+  genreCode: String!
+}
+
+type Subscription {
+  onUpdatePartySessionById(id: String!): PartySession
+    @aws_subscribe(mutations: ["updatePartySession"])
 }
 
 enum SessionState {
   CREATING
   INPROGRESS
   ENDED
-}
-
-type PartySession @model @key(fields: ["city", "sessionStartTime"], name: "cityByStartTime", queryField: "partySessionCityByStartTime") @auth(rules: [{allow: public}]) {
-  id: ID!
-  city: String!
-  sessionStartTime: String!
-  sessionState: SessionState!
-  genreCode: String,
-  expirationTimestamp: AWSTimestamp! @ttl
-  singers: [Singer] @connection(keyName: "byPartySession", fields: ["id"])
-}
-
-type Subscription {
-  onCreateSingerByPartySessionId(partysessionID: String!): Singer
-    @aws_subscribe(mutations: ["createSinger"])
-  onUpdateSingerById(id: String!): Singer
-    @aws_subscribe(mutations: ["updateSinger"])
 }

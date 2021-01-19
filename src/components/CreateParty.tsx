@@ -1,37 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { Spinner } from "react-bootstrap";
+import React from "react";
+import { Button } from "react-bootstrap";
 import { Party, partyClient } from "../api/PartyClient";
 
 interface CreatePartyProps {
+  onCreateStarted: () => void;
+  onCreateFailed: () => void;
   onPartyCreated: (party: Party) => void;
+  disabled: boolean;
 }
 
 const CreateParty = (props: CreatePartyProps) => {
-  const { onPartyCreated } = props;
-  const [creationInProgress, setSucceeded] = useState(true);
+  const { onCreateStarted, onCreateFailed, onPartyCreated, disabled } = props;
 
-  useEffect(() => {
-    const generateParty = async () => {
-      try {
-        const partySession = await partyClient.createParty();
-        onPartyCreated(partySession);
-      } catch (e) {
-        console.error(`Caught error creating party: ${JSON.stringify(e)}`);
-        setSucceeded(false);
-      }
-    };
-    generateParty();
-  }, [onPartyCreated]);
+  const createParty = async () => {
+    try {
+      onCreateStarted();
+      const party = await partyClient.createParty();
+      onPartyCreated(party);
+    } catch (e) {
+      console.error(`Caught error creating party: ${JSON.stringify(e)}`);
+      onCreateFailed();
+    }
+  };
 
-  if (creationInProgress) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="sr-only">Loading...</span>
-      </Spinner>
-    );
-  }
-
-  return <p>Failed to create a party.</p>;
+  return (
+    <Button onClick={createParty} disabled={disabled}>
+      Create new party
+    </Button>
+  );
 };
 
 export default CreateParty;

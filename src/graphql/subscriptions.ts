@@ -2,70 +2,21 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateSingerByPartySessionId = /* GraphQL */ `
-  subscription OnCreateSingerByPartySessionId($partysessionID: String!) {
-    onCreateSingerByPartySessionId(partysessionID: $partysessionID) {
+export const onUpdatePartySessionById = /* GraphQL */ `
+  subscription OnUpdatePartySessionById($id: String!) {
+    onUpdatePartySessionById(id: $id) {
       id
-      name
-      partysessionID
-      votes
-      hearts
-      expirationTimestamp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateSingerById = /* GraphQL */ `
-  subscription OnUpdateSingerById($id: String!) {
-    onUpdateSingerById(id: $id) {
-      id
-      name
-      partysessionID
-      votes
-      hearts
-      expirationTimestamp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateSinger = /* GraphQL */ `
-  subscription OnCreateSinger {
-    onCreateSinger {
-      id
-      name
-      partysessionID
-      votes
-      hearts
-      expirationTimestamp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateSinger = /* GraphQL */ `
-  subscription OnUpdateSinger {
-    onUpdateSinger {
-      id
-      name
-      partysessionID
-      votes
-      hearts
-      expirationTimestamp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteSinger = /* GraphQL */ `
-  subscription OnDeleteSinger {
-    onDeleteSinger {
-      id
-      name
-      partysessionID
-      votes
-      hearts
+      city
+      sessionStartTime
+      sessionState
+      rounds {
+        genreCode
+      }
+      singers {
+        name
+        votes
+        hearts
+      }
       expirationTimestamp
       createdAt
       updatedAt
@@ -79,23 +30,17 @@ export const onCreatePartySession = /* GraphQL */ `
       city
       sessionStartTime
       sessionState
-      genreCode
+      rounds {
+        genreCode
+      }
+      singers {
+        name
+        votes
+        hearts
+      }
       expirationTimestamp
       createdAt
       updatedAt
-      singers {
-        items {
-          id
-          name
-          partysessionID
-          votes
-          hearts
-          expirationTimestamp
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -106,23 +51,17 @@ export const onUpdatePartySession = /* GraphQL */ `
       city
       sessionStartTime
       sessionState
-      genreCode
+      rounds {
+        genreCode
+      }
+      singers {
+        name
+        votes
+        hearts
+      }
       expirationTimestamp
       createdAt
       updatedAt
-      singers {
-        items {
-          id
-          name
-          partysessionID
-          votes
-          hearts
-          expirationTimestamp
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -133,23 +72,17 @@ export const onDeletePartySession = /* GraphQL */ `
       city
       sessionStartTime
       sessionState
-      genreCode
+      rounds {
+        genreCode
+      }
+      singers {
+        name
+        votes
+        hearts
+      }
       expirationTimestamp
       createdAt
       updatedAt
-      singers {
-        items {
-          id
-          name
-          partysessionID
-          votes
-          hearts
-          expirationTimestamp
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;

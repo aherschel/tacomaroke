@@ -2,41 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getSinger = /* GraphQL */ `
-  query GetSinger($id: ID!) {
-    getSinger(id: $id) {
-      id
-      name
-      partysessionID
-      votes
-      hearts
-      expirationTimestamp
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listSingers = /* GraphQL */ `
-  query ListSingers(
-    $filter: ModelSingerFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listSingers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        partysessionID
-        votes
-        hearts
-        expirationTimestamp
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
 export const getPartySession = /* GraphQL */ `
   query GetPartySession($id: ID!) {
     getPartySession(id: $id) {
@@ -44,23 +9,17 @@ export const getPartySession = /* GraphQL */ `
       city
       sessionStartTime
       sessionState
-      genreCode
+      rounds {
+        genreCode
+      }
+      singers {
+        name
+        votes
+        hearts
+      }
       expirationTimestamp
       createdAt
       updatedAt
-      singers {
-        items {
-          id
-          name
-          partysessionID
-          votes
-          hearts
-          expirationTimestamp
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -76,13 +35,17 @@ export const listPartySessions = /* GraphQL */ `
         city
         sessionStartTime
         sessionState
-        genreCode
+        rounds {
+          genreCode
+        }
+        singers {
+          name
+          votes
+          hearts
+        }
         expirationTimestamp
         createdAt
         updatedAt
-        singers {
-          nextToken
-        }
       }
       nextToken
     }
@@ -110,13 +73,17 @@ export const partySessionCityByStartTime = /* GraphQL */ `
         city
         sessionStartTime
         sessionState
-        genreCode
+        rounds {
+          genreCode
+        }
+        singers {
+          name
+          votes
+          hearts
+        }
         expirationTimestamp
         createdAt
         updatedAt
-        singers {
-          nextToken
-        }
       }
       nextToken
     }

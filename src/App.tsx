@@ -39,7 +39,7 @@ const App = () => {
               <PartyPage />
             </Route>
             <Route path="/">
-              <Redirect to="/song" />
+              <Redirect to="/party" />
             </Route>
           </Switch>
           <AppFooter />

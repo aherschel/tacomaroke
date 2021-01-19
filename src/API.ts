@@ -2,24 +2,41 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateSingerInput = {
+export type CreatePartySessionInput = {
   id?: string | null,
-  name: string,
-  partysessionID: string,
-  votes: number,
-  hearts: number,
+  city: string,
+  sessionStartTime: string,
+  sessionState: SessionState,
+  rounds?: Array< RoundInput > | null,
+  singers?: Array< SingerInput > | null,
   expirationTimestamp: number,
 };
 
-export type ModelSingerConditionInput = {
-  name?: ModelStringInput | null,
-  partysessionID?: ModelIDInput | null,
-  votes?: ModelIntInput | null,
-  hearts?: ModelIntInput | null,
+export enum SessionState {
+  CREATING = "CREATING",
+  INPROGRESS = "INPROGRESS",
+  ENDED = "ENDED",
+}
+
+
+export type RoundInput = {
+  genreCode: string,
+};
+
+export type SingerInput = {
+  name: string,
+  votes: number,
+  hearts: number,
+};
+
+export type ModelPartySessionConditionInput = {
+  city?: ModelStringInput | null,
+  sessionStartTime?: ModelStringInput | null,
+  sessionState?: ModelSessionStateInput | null,
   expirationTimestamp?: ModelIntInput | null,
-  and?: Array< ModelSingerConditionInput | null > | null,
-  or?: Array< ModelSingerConditionInput | null > | null,
-  not?: ModelSingerConditionInput | null,
+  and?: Array< ModelPartySessionConditionInput | null > | null,
+  or?: Array< ModelPartySessionConditionInput | null > | null,
+  not?: ModelPartySessionConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -62,20 +79,9 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
+export type ModelSessionStateInput = {
+  eq?: SessionState | null,
+  ne?: SessionState | null,
 };
 
 export type ModelIntInput = {
@@ -90,57 +96,13 @@ export type ModelIntInput = {
   attributeType?: ModelAttributeTypes | null,
 };
 
-export type UpdateSingerInput = {
-  id: string,
-  name?: string | null,
-  partysessionID?: string | null,
-  votes?: number | null,
-  hearts?: number | null,
-  expirationTimestamp?: number | null,
-};
-
-export type DeleteSingerInput = {
-  id?: string | null,
-};
-
-export type CreatePartySessionInput = {
-  id?: string | null,
-  city: string,
-  sessionStartTime: string,
-  sessionState: SessionState,
-  genreCode?: string | null,
-  expirationTimestamp: number,
-};
-
-export enum SessionState {
-  CREATING = "CREATING",
-  INPROGRESS = "INPROGRESS",
-  ENDED = "ENDED",
-}
-
-
-export type ModelPartySessionConditionInput = {
-  city?: ModelStringInput | null,
-  sessionStartTime?: ModelStringInput | null,
-  sessionState?: ModelSessionStateInput | null,
-  genreCode?: ModelStringInput | null,
-  expirationTimestamp?: ModelIntInput | null,
-  and?: Array< ModelPartySessionConditionInput | null > | null,
-  or?: Array< ModelPartySessionConditionInput | null > | null,
-  not?: ModelPartySessionConditionInput | null,
-};
-
-export type ModelSessionStateInput = {
-  eq?: SessionState | null,
-  ne?: SessionState | null,
-};
-
 export type UpdatePartySessionInput = {
   id: string,
   city?: string | null,
   sessionStartTime?: string | null,
   sessionState?: SessionState | null,
-  genreCode?: string | null,
+  rounds?: Array< RoundInput > | null,
+  singers?: Array< SingerInput > | null,
   expirationTimestamp?: number | null,
 };
 
@@ -148,28 +110,31 @@ export type DeletePartySessionInput = {
   id?: string | null,
 };
 
-export type ModelSingerFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  partysessionID?: ModelIDInput | null,
-  votes?: ModelIntInput | null,
-  hearts?: ModelIntInput | null,
-  expirationTimestamp?: ModelIntInput | null,
-  and?: Array< ModelSingerFilterInput | null > | null,
-  or?: Array< ModelSingerFilterInput | null > | null,
-  not?: ModelSingerFilterInput | null,
-};
-
 export type ModelPartySessionFilterInput = {
   id?: ModelIDInput | null,
   city?: ModelStringInput | null,
   sessionStartTime?: ModelStringInput | null,
   sessionState?: ModelSessionStateInput | null,
-  genreCode?: ModelStringInput | null,
   expirationTimestamp?: ModelIntInput | null,
   and?: Array< ModelPartySessionFilterInput | null > | null,
   or?: Array< ModelPartySessionFilterInput | null > | null,
   not?: ModelPartySessionFilterInput | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
 };
 
 export type ModelStringKeyConditionInput = {
@@ -188,63 +153,6 @@ export enum ModelSortDirection {
 }
 
 
-export type CreateSingerMutationVariables = {
-  input: CreateSingerInput,
-  condition?: ModelSingerConditionInput | null,
-};
-
-export type CreateSingerMutation = {
-  createSinger:  {
-    __typename: "Singer",
-    id: string,
-    name: string,
-    partysessionID: string,
-    votes: number,
-    hearts: number,
-    expirationTimestamp: number,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateSingerMutationVariables = {
-  input: UpdateSingerInput,
-  condition?: ModelSingerConditionInput | null,
-};
-
-export type UpdateSingerMutation = {
-  updateSinger:  {
-    __typename: "Singer",
-    id: string,
-    name: string,
-    partysessionID: string,
-    votes: number,
-    hearts: number,
-    expirationTimestamp: number,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteSingerMutationVariables = {
-  input: DeleteSingerInput,
-  condition?: ModelSingerConditionInput | null,
-};
-
-export type DeleteSingerMutation = {
-  deleteSinger:  {
-    __typename: "Singer",
-    id: string,
-    name: string,
-    partysessionID: string,
-    votes: number,
-    hearts: number,
-    expirationTimestamp: number,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
 export type CreatePartySessionMutationVariables = {
   input: CreatePartySessionInput,
   condition?: ModelPartySessionConditionInput | null,
@@ -257,25 +165,19 @@ export type CreatePartySessionMutation = {
     city: string,
     sessionStartTime: string,
     sessionState: SessionState,
-    genreCode: string | null,
+    rounds:  Array< {
+      __typename: "Round",
+      genreCode: string,
+    } > | null,
+    singers:  Array< {
+      __typename: "Singer",
+      name: string,
+      votes: number,
+      hearts: number,
+    } > | null,
     expirationTimestamp: number,
     createdAt: string,
     updatedAt: string,
-    singers:  {
-      __typename: "ModelSingerConnection",
-      items:  Array< {
-        __typename: "Singer",
-        id: string,
-        name: string,
-        partysessionID: string,
-        votes: number,
-        hearts: number,
-        expirationTimestamp: number,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
   } | null,
 };
 
@@ -291,25 +193,19 @@ export type UpdatePartySessionMutation = {
     city: string,
     sessionStartTime: string,
     sessionState: SessionState,
-    genreCode: string | null,
+    rounds:  Array< {
+      __typename: "Round",
+      genreCode: string,
+    } > | null,
+    singers:  Array< {
+      __typename: "Singer",
+      name: string,
+      votes: number,
+      hearts: number,
+    } > | null,
     expirationTimestamp: number,
     createdAt: string,
     updatedAt: string,
-    singers:  {
-      __typename: "ModelSingerConnection",
-      items:  Array< {
-        __typename: "Singer",
-        id: string,
-        name: string,
-        partysessionID: string,
-        votes: number,
-        hearts: number,
-        expirationTimestamp: number,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
   } | null,
 };
 
@@ -325,67 +221,19 @@ export type DeletePartySessionMutation = {
     city: string,
     sessionStartTime: string,
     sessionState: SessionState,
-    genreCode: string | null,
-    expirationTimestamp: number,
-    createdAt: string,
-    updatedAt: string,
-    singers:  {
-      __typename: "ModelSingerConnection",
-      items:  Array< {
-        __typename: "Singer",
-        id: string,
-        name: string,
-        partysessionID: string,
-        votes: number,
-        hearts: number,
-        expirationTimestamp: number,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
-};
-
-export type GetSingerQueryVariables = {
-  id: string,
-};
-
-export type GetSingerQuery = {
-  getSinger:  {
-    __typename: "Singer",
-    id: string,
-    name: string,
-    partysessionID: string,
-    votes: number,
-    hearts: number,
-    expirationTimestamp: number,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListSingersQueryVariables = {
-  filter?: ModelSingerFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListSingersQuery = {
-  listSingers:  {
-    __typename: "ModelSingerConnection",
-    items:  Array< {
+    rounds:  Array< {
+      __typename: "Round",
+      genreCode: string,
+    } > | null,
+    singers:  Array< {
       __typename: "Singer",
-      id: string,
       name: string,
-      partysessionID: string,
       votes: number,
       hearts: number,
-      expirationTimestamp: number,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
-    nextToken: string | null,
+    } > | null,
+    expirationTimestamp: number,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -400,25 +248,19 @@ export type GetPartySessionQuery = {
     city: string,
     sessionStartTime: string,
     sessionState: SessionState,
-    genreCode: string | null,
+    rounds:  Array< {
+      __typename: "Round",
+      genreCode: string,
+    } > | null,
+    singers:  Array< {
+      __typename: "Singer",
+      name: string,
+      votes: number,
+      hearts: number,
+    } > | null,
     expirationTimestamp: number,
     createdAt: string,
     updatedAt: string,
-    singers:  {
-      __typename: "ModelSingerConnection",
-      items:  Array< {
-        __typename: "Singer",
-        id: string,
-        name: string,
-        partysessionID: string,
-        votes: number,
-        hearts: number,
-        expirationTimestamp: number,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
   } | null,
 };
 
@@ -437,14 +279,19 @@ export type ListPartySessionsQuery = {
       city: string,
       sessionStartTime: string,
       sessionState: SessionState,
-      genreCode: string | null,
+      rounds:  Array< {
+        __typename: "Round",
+        genreCode: string,
+      } > | null,
+      singers:  Array< {
+        __typename: "Singer",
+        name: string,
+        votes: number,
+        hearts: number,
+      } > | null,
       expirationTimestamp: number,
       createdAt: string,
       updatedAt: string,
-      singers:  {
-        __typename: "ModelSingerConnection",
-        nextToken: string | null,
-      } | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -468,91 +315,45 @@ export type PartySessionCityByStartTimeQuery = {
       city: string,
       sessionStartTime: string,
       sessionState: SessionState,
-      genreCode: string | null,
+      rounds:  Array< {
+        __typename: "Round",
+        genreCode: string,
+      } > | null,
+      singers:  Array< {
+        __typename: "Singer",
+        name: string,
+        votes: number,
+        hearts: number,
+      } > | null,
       expirationTimestamp: number,
       createdAt: string,
       updatedAt: string,
-      singers:  {
-        __typename: "ModelSingerConnection",
-        nextToken: string | null,
-      } | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
 };
 
-export type OnCreateSingerByPartySessionIdSubscriptionVariables = {
-  partysessionID: string,
-};
-
-export type OnCreateSingerByPartySessionIdSubscription = {
-  onCreateSingerByPartySessionId:  {
-    __typename: "Singer",
-    id: string,
-    name: string,
-    partysessionID: string,
-    votes: number,
-    hearts: number,
-    expirationTimestamp: number,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateSingerByIdSubscriptionVariables = {
+export type OnUpdatePartySessionByIdSubscriptionVariables = {
   id: string,
 };
 
-export type OnUpdateSingerByIdSubscription = {
-  onUpdateSingerById:  {
-    __typename: "Singer",
+export type OnUpdatePartySessionByIdSubscription = {
+  onUpdatePartySessionById:  {
+    __typename: "PartySession",
     id: string,
-    name: string,
-    partysessionID: string,
-    votes: number,
-    hearts: number,
-    expirationTimestamp: number,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateSingerSubscription = {
-  onCreateSinger:  {
-    __typename: "Singer",
-    id: string,
-    name: string,
-    partysessionID: string,
-    votes: number,
-    hearts: number,
-    expirationTimestamp: number,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateSingerSubscription = {
-  onUpdateSinger:  {
-    __typename: "Singer",
-    id: string,
-    name: string,
-    partysessionID: string,
-    votes: number,
-    hearts: number,
-    expirationTimestamp: number,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteSingerSubscription = {
-  onDeleteSinger:  {
-    __typename: "Singer",
-    id: string,
-    name: string,
-    partysessionID: string,
-    votes: number,
-    hearts: number,
+    city: string,
+    sessionStartTime: string,
+    sessionState: SessionState,
+    rounds:  Array< {
+      __typename: "Round",
+      genreCode: string,
+    } > | null,
+    singers:  Array< {
+      __typename: "Singer",
+      name: string,
+      votes: number,
+      hearts: number,
+    } > | null,
     expirationTimestamp: number,
     createdAt: string,
     updatedAt: string,
@@ -566,25 +367,19 @@ export type OnCreatePartySessionSubscription = {
     city: string,
     sessionStartTime: string,
     sessionState: SessionState,
-    genreCode: string | null,
+    rounds:  Array< {
+      __typename: "Round",
+      genreCode: string,
+    } > | null,
+    singers:  Array< {
+      __typename: "Singer",
+      name: string,
+      votes: number,
+      hearts: number,
+    } > | null,
     expirationTimestamp: number,
     createdAt: string,
     updatedAt: string,
-    singers:  {
-      __typename: "ModelSingerConnection",
-      items:  Array< {
-        __typename: "Singer",
-        id: string,
-        name: string,
-        partysessionID: string,
-        votes: number,
-        hearts: number,
-        expirationTimestamp: number,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
   } | null,
 };
 
@@ -595,25 +390,19 @@ export type OnUpdatePartySessionSubscription = {
     city: string,
     sessionStartTime: string,
     sessionState: SessionState,
-    genreCode: string | null,
+    rounds:  Array< {
+      __typename: "Round",
+      genreCode: string,
+    } > | null,
+    singers:  Array< {
+      __typename: "Singer",
+      name: string,
+      votes: number,
+      hearts: number,
+    } > | null,
     expirationTimestamp: number,
     createdAt: string,
     updatedAt: string,
-    singers:  {
-      __typename: "ModelSingerConnection",
-      items:  Array< {
-        __typename: "Singer",
-        id: string,
-        name: string,
-        partysessionID: string,
-        votes: number,
-        hearts: number,
-        expirationTimestamp: number,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
   } | null,
 };
 
@@ -624,24 +413,18 @@ export type OnDeletePartySessionSubscription = {
     city: string,
     sessionStartTime: string,
     sessionState: SessionState,
-    genreCode: string | null,
+    rounds:  Array< {
+      __typename: "Round",
+      genreCode: string,
+    } > | null,
+    singers:  Array< {
+      __typename: "Singer",
+      name: string,
+      votes: number,
+      hearts: number,
+    } > | null,
     expirationTimestamp: number,
     createdAt: string,
     updatedAt: string,
-    singers:  {
-      __typename: "ModelSingerConnection",
-      items:  Array< {
-        __typename: "Singer",
-        id: string,
-        name: string,
-        partysessionID: string,
-        votes: number,
-        hearts: number,
-        expirationTimestamp: number,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
   } | null,
 };

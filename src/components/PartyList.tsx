@@ -4,7 +4,7 @@ import { Party } from "../api/PartyClient";
 
 type PartyListProps = {
   parties: Party[];
-  onPartySelected: (partyId: string) => void;
+  onPartySelected: (party: Party) => void;
   disabled: boolean;
 };
 
@@ -46,7 +46,7 @@ const PartyList = (props: PartyListProps) => {
                 size="lg"
                 block
                 onClick={() => {
-                  onPartySelected(party.id);
+                  onPartySelected(party);
                 }}
                 disabled={disabled}
               >
