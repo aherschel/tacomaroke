@@ -39,11 +39,8 @@ const App = () => {
             <Route path="/party/:partyId">
               <PartyPage />
             </Route>
-            <Route path="/party">
-              <PartyLobbyPage />
-            </Route>
             <Route path="/">
-              <Redirect to="/party" />
+              <PartyLobbyPage />
             </Route>
           </Switch>
           <AppFooter />
