@@ -52,7 +52,7 @@ const PartyPage = () => {
           <Button
             variant="outline-primary"
             onClick={() => {
-              history.push("/party");
+              history.push("/");
             }}
           >
             Start Over
@@ -70,7 +70,7 @@ const PartyPage = () => {
           <Button
             variant="outline-primary"
             onClick={() => {
-              history.push("/party");
+              history.push("/");
             }}
           >
             Start Over
