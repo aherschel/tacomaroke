@@ -165,11 +165,7 @@ class PartyClient {
     const response = await API.graphql(
       graphqlOperation(getPartySession, mutation)
     );
-    const party: Party = response.data.getPartySession;
-    if (party && party.sessionState === SessionState.CREATING) {
-      return party;
-    }
-    throw new Error("Expected to find party that was being created.");
+    return response.data.getPartySession;
   };
 
   private getRandomCity = () =>

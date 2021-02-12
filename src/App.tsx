@@ -15,6 +15,7 @@ import AppFooter from "./components/AppFooter";
 import AboutPage from "./pages/AboutPage";
 import SongPage from "./pages/SongPage";
 import PartyPage from "./pages/PartyPage";
+import PartyLobbyPage from "./pages/PartyLobbyPage";
 
 Amplify.configure(aws_exports);
 
@@ -35,8 +36,11 @@ const App = () => {
             <Route path="/song">
               <SongPage />
             </Route>
-            <Route path="/party">
+            <Route path="/party/:partyId">
               <PartyPage />
+            </Route>
+            <Route path="/party">
+              <PartyLobbyPage />
             </Route>
             <Route path="/">
               <Redirect to="/party" />

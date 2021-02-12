@@ -1,17 +1,24 @@
 import { API, graphqlOperation } from "aws-amplify";
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { SessionState } from "../API";
 import { Party, partyClient } from "../api/PartyClient";
-import CreateOrJoinParty from "../components/CreateOrJoinParty";
 import PartyLobby from "../components/PartyLobby";
 import PartyPlay from "../components/PartyPlay";
 import { onUpdatePartySessionById } from "../graphql/subscriptions";
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 const PartyPage = () => {
-  const [partyId, setPartyId] = useState<string | undefined>();
+  const { partyId } = useParams<{ partyId: string }>();
+  const query = useQuery();
   const [party, setParty] = useState<Party | undefined>();
-  const [isHost, setIsHost] = useState(false);
+  const history = useHistory();
+
+  const isHost = query.get("isHost") === "true";
 
   useEffect(() => {
     const loadParty = async (updatedPartyId: string) => {
@@ -19,31 +26,23 @@ const PartyPage = () => {
       setParty(loadedParty);
     };
 
-    if (partyId) {
-      loadParty(partyId);
+    loadParty(partyId);
 
-      const subscription = API.graphql(
-        graphqlOperation(onUpdatePartySessionById, { id: partyId })
-      ).subscribe({
-        next: (data: any) => {
-          const updatedParty = data.value.data.onUpdatePartySessionById;
-          setParty(updatedParty);
-        },
-      });
+    const subscription = API.graphql(
+      graphqlOperation(onUpdatePartySessionById, { id: partyId })
+    ).subscribe({
+      next: (data: any) => {
+        const updatedParty = data.value.data.onUpdatePartySessionById;
+        setParty(updatedParty);
+      },
+    });
 
-      return () => {
-        if (subscription) {
-          subscription.unsubscribe();
-        }
-      };
-    }
-    return undefined;
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    };
   }, [partyId]);
-
-  const onEnterPartyLobby = (newParty: Party, newIsHost: boolean) => {
-    setPartyId(newParty.id);
-    setIsHost(newIsHost);
-  };
 
   const restartButton = (
     <>
@@ -53,8 +52,7 @@ const PartyPage = () => {
           <Button
             variant="outline-primary"
             onClick={() => {
-              setPartyId(undefined);
-              setParty(undefined);
+              history.push("/party");
             }}
           >
             Start Over
@@ -72,8 +70,7 @@ const PartyPage = () => {
           <Button
             variant="outline-primary"
             onClick={() => {
-              setPartyId(undefined);
-              setParty(undefined);
+              history.push("/party");
             }}
           >
             Start Over
@@ -94,11 +91,7 @@ const PartyPage = () => {
   );
 
   if (!party) {
-    return (
-      <Container fluid>
-        <CreateOrJoinParty onEnterPartyLobby={onEnterPartyLobby} />
-      </Container>
-    );
+    return <div />;
   }
 
   switch (party.sessionState) {
