@@ -13,6 +13,9 @@ const AppFooter = () => {
           <Nav.Link href="https://github.com/aherschel/tacomaroke">
             <FaGithub /> View Source
           </Nav.Link>
+          <Nav.Link href="https://www.buymeacoffee.com/aherschel">
+            <img alt="buy me a coffee link" src="/bmc_icon.png" width="137px" height="30px" />
+          </Nav.Link>
         </Nav>
       </Container>
     </Navbar>
