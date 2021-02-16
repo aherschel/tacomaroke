@@ -36,6 +36,9 @@ const AppHeader = () => {
           <Link className="nav-link" to="/about">
             About
           </Link>
+          <Link className="nav-link" to="/services">
+            Services
+          </Link>
           {isDebugEnabled() && (
             <Link className="nav-link" to="/debug">
               Debug Pages
