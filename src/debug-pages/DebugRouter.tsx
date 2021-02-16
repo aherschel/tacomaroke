@@ -1,8 +1,9 @@
 import React from "react";
 import { Switch, Route, useRouteMatch, Link, Redirect } from "react-router-dom";
-import { isDebugEnabled } from "../FeatureFlags";
 import { Navbar, Nav } from "react-bootstrap";
+import { isDebugEnabled } from "../FeatureFlags";
 import SpotifyIntegrationDebugPage from "./SpotifyIntegrationDebugPage";
+import YoutubeMusicIntegrationDebugPage from "./YoutubeMusicIntegrationDebugPage";
 
 const DebugHeader = () => {
   return (
@@ -14,6 +15,9 @@ const DebugHeader = () => {
           <Link className="nav-link" to="/debug/spotify-integration">
             Spotify Integration
           </Link>
+          <Link className="nav-link" to="/debug/youtube-music-integration">
+            Youtube Music Integration
+          </Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
@@ -24,7 +28,7 @@ const DebugRouter = () => {
   const { path } = useRouteMatch();
 
   if (!isDebugEnabled()) {
-      return <Redirect to="/error" />
+    return <Redirect to="/error" />;
   }
 
   return (
@@ -33,6 +37,9 @@ const DebugRouter = () => {
       <Switch>
         <Route path={`${path}/spotify-integration`}>
           <SpotifyIntegrationDebugPage />
+        </Route>
+        <Route path={`${path}/youtube-music-integration`}>
+          <YoutubeMusicIntegrationDebugPage />
         </Route>
       </Switch>
     </div>

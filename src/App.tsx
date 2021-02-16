@@ -13,6 +13,7 @@ import PartyPage from "./pages/PartyPage";
 import PartyLobbyPage from "./pages/PartyLobbyPage";
 import DebugRouter from "./debug-pages/DebugRouter";
 import PageNotFoundPage from "./pages/PageNotFoundPage";
+import SupportedServicesPage from "./pages/SupportedServicesPage";
 
 Amplify.configure(aws_exports);
 
@@ -27,6 +28,9 @@ const App = () => {
         <AppHeader />
         <Container>
           <Switch>
+            <Route path="/services" exact>
+              <SupportedServicesPage />
+            </Route>
             <Route path="/about" exact>
               <AboutPage />
             </Route>
