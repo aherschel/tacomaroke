@@ -1,51 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Jumbotron } from "react-bootstrap";
-import SpotifyWebApi from "spotify-web-api-js";
-import spotifyClient from "../api/SpotifyClient";
-
-const listPlaylistTitles = async (playlistId: string): Promise<Track[]> => {
-  const accessToken = spotifyClient.getAccessTokenFromURI();
-  if (!accessToken) {
-    return Promise.reject();
-  }
-  const spotifyApi = new SpotifyWebApi();
-  spotifyApi.setAccessToken(accessToken);
-  const playlist = await spotifyApi.getPlaylist(playlistId);
-  return playlist.tracks.items
-    .map((track) => {
-      if (!track || !track.track || !track.track.name) {
-        return null;
-      }
-      const { name, id } = track.track;
-      return { name, id };
-    })
-    .filter((trackName) => trackName) as Track[];
-};
-
-const listUserPlaylists = async (): Promise<SpotifyApi.ListOfUsersPlaylistsResponse> => {
-  const accessToken = spotifyClient.getAccessTokenFromURI();
-  if (!accessToken) {
-    return Promise.reject();
-  }
-  const spotifyApi = new SpotifyWebApi();
-  spotifyApi.setAccessToken(accessToken);
-  return spotifyApi.getUserPlaylists(undefined);
-};
-
-const redirectToSpotifyAuth = () => {
-  window.location.href = spotifyClient.getAuthURL();
-};
-
-interface Track {
-  id: string;
-  name: string;
-}
-
-interface PlaylistTracks {
-  id: string;
-  title: string;
-  tracks: Track[];
-}
+import { Alert, Button, Jumbotron } from "react-bootstrap";
+import spotifyClient, {
+  Category,
+  PlaylistTracks,
+  Track,
+} from "../api/SpotifyClient";
 
 const SpotifyTrack = ({ track }: { track: Track }) => {
   const [showPlayer, enablePlayer] = useState(false);
@@ -91,23 +50,19 @@ const SpotifyTrack = ({ track }: { track: Track }) => {
 const UserPlaylists = () => {
   const [playlists, setPlaylists] = useState<PlaylistTracks[]>();
 
-  useEffect(() => {
-    const loadPlaylists = async () => {
-      const newPlaylists = await listUserPlaylists();
-      const playlistMap: PlaylistTracks[] = await Promise.all(
-        newPlaylists.items.map(async (plist) => {
-          const titles = await listPlaylistTitles(plist.id);
-          return { id: plist.id, title: plist.name, tracks: titles };
-        })
-      );
-      setPlaylists(playlistMap);
-    };
-
-    loadPlaylists();
-  }, []);
+  const loadPlaylists = async () => {
+    const newPlaylists = await spotifyClient.listPlaylists();
+    const playlistMap: PlaylistTracks[] = await Promise.all(
+      newPlaylists.items.map(async (plist) => {
+        const titles = await spotifyClient.listPlaylistTitles(plist.id);
+        return { id: plist.id, title: plist.name, tracks: titles };
+      })
+    );
+    setPlaylists(playlistMap);
+  };
 
   if (!playlists) {
-    return null;
+    return <Button onClick={loadPlaylists}>Load playlists</Button>;
   }
 
   return (
@@ -115,12 +70,12 @@ const UserPlaylists = () => {
       <h3>User Playlists</h3>
       <ol>
         {playlists.map((playlist) => (
-          <li id={playlist.id}>
+          <li key={playlist.id}>
             {playlist.title}
             <ul>
               {playlist.tracks.map((track) => {
                 return (
-                  <li id={track.id}>
+                  <li key={track.id}>
                     <SpotifyTrack track={track} />
                   </li>
                 );
@@ -133,9 +88,91 @@ const UserPlaylists = () => {
   );
 };
 
+const Categories = () => {
+  const [categories, setCategories] = useState<Category[]>();
+
+  const loadCategories = async () => {
+    const newCategories = await spotifyClient.getCategories();
+    setCategories(newCategories);
+  };
+
+  if (!categories) {
+    return <Button onClick={loadCategories}>Load Categories</Button>;
+  }
+
+  return (
+    <div>
+      <h3>Categories</h3>
+      <ul>
+        {categories.map((category: Category) => (
+          <li key={category.id}>{category.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const SpotifyAuthNotifications = () => {
+  const [showAuth, setShowAuth] = useState(
+    spotifyClient.getAccessTokenFromURI() === undefined
+  );
+  const [showExpired, setShowExpired] = useState(false);
+  const [hideDenied, setHideDenied] = useState(false);
+
+  useEffect(() => {
+    const handleAuthCallback = () => {
+      setShowExpired(true);
+    };
+
+    return spotifyClient.subscribeToAuthUpdates(handleAuthCallback);
+  });
+
+  if (spotifyClient.isAuthDenied() && !hideDenied) {
+    return (
+      <Alert variant="danger" onClose={() => setHideDenied(true)} dismissible>
+        <Alert.Heading>Spotify Authorization Denied</Alert.Heading>
+        <p>
+          You need to grant authorization for spotify integration to work. Click{" "}
+          <a href={spotifyClient.getAuthURL()}>this link</a> to refresh.
+        </p>
+      </Alert>
+    );
+  }
+
+  if (showAuth) {
+    return (
+      <Alert variant="warning" onClose={() => setShowAuth(false)} dismissible>
+        <Alert.Heading>Spotify Authorization Required</Alert.Heading>
+        <p>
+          You need to grant authorization for spotify integration to work. Click{" "}
+          <a href={spotifyClient.getAuthURL()}>this link</a> to refresh.
+        </p>
+      </Alert>
+    );
+  }
+
+  if (showExpired) {
+    return (
+      <Alert
+        variant="warning"
+        onClose={() => setShowExpired(false)}
+        dismissible
+      >
+        <Alert.Heading>Spotify Authorization Expired</Alert.Heading>
+        <p>
+          Your authorization needs to be refreshed. Click{" "}
+          <a href={spotifyClient.getAuthURL()}>this link</a> to refresh.
+        </p>
+      </Alert>
+    );
+  }
+  return null;
+};
+
 const SpotifyIntegrationDebugPage = () => {
   return (
     <>
+      <SpotifyAuthNotifications />
       <br />
       <Jumbotron>
         <h1>
@@ -152,7 +189,7 @@ const SpotifyIntegrationDebugPage = () => {
           playlist and playback apis.
         </p>
       </Jumbotron>
-      <Button onClick={redirectToSpotifyAuth}>Connect To Spotify</Button>
+      <Categories />
       <UserPlaylists />
     </>
   );
