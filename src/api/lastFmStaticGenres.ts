@@ -1,33 +1,35 @@
-export type Track = {
+export type TrackConfig = {
   name: string;
   url: string;
 };
 
-export type Genre = {
+export type GenreConfig = {
+  id: string;
   name: string;
-  tag?: string;
-  tracks?: Track[];
+  tracks?: TrackConfig[];
 };
 
 // Where possible use a tag to search last.fm, but you can provide tracks manually as well.
-export const genres: Genre[] = [
+export const genres: GenreConfig[] = [
   {
     name: "Breakup songs",
-    tag: "breakup",
+    id: "breakup",
   },
   {
     name: "Songs about drinking",
-    tag: "drinking+songs",
+    id: "drinking+songs",
   },
   {
     name: "Ladies of the 80’s",
+    id: "Ladies of the 80’s",
   },
   {
     name: "Songs about sex",
-    tag: "songs+about+sex",
+    id: "songs+about+sex",
   },
   {
     name: "Songs about butts",
+    id: "Songs about butts",
     tracks: [
       { name: "Baby Got Back", url: "" },
       { name: "Shake Your Booty", url: "" },
@@ -39,90 +41,94 @@ export const genres: Genre[] = [
   },
   {
     name: "Hair bands",
-    tag: "hair+metal",
+    id: "hair+metal",
   },
   {
     name: "Pump up songs",
+    id: "Pump up songs",
   },
   {
     name: "Boy bands",
-    tag: "boy+bands",
+    id: "boy+bands",
   },
   {
     name: "Hip-hop",
-    tag: "hip+hop",
+    id: "hip+hop",
   },
   {
     name: "Rap",
-    tag: "rap",
+    id: "rap",
   },
   {
     name: "Classic rock",
-    tag: "classic+rock",
+    id: "classic+rock",
   },
   {
     name: "Vans Warped Tour",
-    tag: "warped+tour",
+    id: "warped+tour",
   },
   {
     name: "The 70’s",
-    tag: "70s",
+    id: "70s",
   },
   {
     name: "The 80’s",
-    tag: "80s",
+    id: "80s",
   },
   {
     name: "The 90’s",
-    tag: "90s",
+    id: "90s",
   },
   {
     name: "Early 2000’s",
-    tag: "2000s",
+    id: "2000s",
   },
   {
     name: "Music from Films",
-    tag: "soundtrack",
+    id: "soundtrack",
   },
   {
     name: "One hit wonders",
-    tag: "one+hit+wonder",
+    id: "one+hit+wonder",
   },
   {
     name: "90’s country",
-    tag: "90s+country",
+    id: "90s+country",
   },
   {
     name: "Country ladies",
-    tag: "ladies+of+country",
+    id: "ladies+of+country",
   },
   {
     name: "Country fellas",
-    tag: "country",
+    id: "country",
   },
   {
     name: "Songs with a name in the title",
+    id: "Songs with a name in the title",
   },
   {
     name: "Teenage Love Songs",
+    id: "Teenage Love Songs",
   },
   {
     name: "Songs about love",
-    tag: "love+song",
+    id: "love+song",
   },
   {
     name: "Taylor Swift",
-    tag: "taylor+swift",
+    id: "taylor+swift",
   },
   {
     name: "Rush",
-    tag: "rush",
+    id: "rush",
   },
   {
     name: "Red Hot Chili Peppers",
-    tag: "red+hot+chili+peppers",
+    id: "red+hot+chili+peppers",
   },
   {
     name: "Freeplay!!",
+    id: "Freeplay!!",
   },
 ];

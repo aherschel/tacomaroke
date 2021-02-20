@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Tabs, Tab } from "react-bootstrap";
 import { Analytics } from "aws-amplify";
-import { genres, Genre } from "../api/genres";
+import { genres, GenreConfig } from "../api/lastFmStaticGenres";
 import GenreRandomizer from "./GenreRandomizer";
 import GenrePicker from "./GenrePicker";
 import GenreHistory from "./GenreHistory";
 import SongSuggestions from "./SongSuggestions";
 
 const GenreController = () => {
-  const [currentGenre, setCurrentGenre] = useState<Genre | undefined>();
-  const [genreHistory, setGenreHistory] = useState<Genre[]>([]);
+  const [currentGenre, setCurrentGenre] = useState<GenreConfig | undefined>();
+  const [genreHistory, setGenreHistory] = useState<GenreConfig[]>([]);
 
-  const onGenreUpdated = async (genre: Genre, wasManual: boolean) => {
+  const onGenreUpdated = async (genre: GenreConfig, wasManual: boolean) => {
     Analytics.record({
       name: wasManual ? "genreSelected" : "genreRandomized",
       attributes: { genreName: genre.name },

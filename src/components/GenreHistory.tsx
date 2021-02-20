@@ -1,9 +1,9 @@
 import React from "react";
-import { Genre } from "../api/genres";
+import { GenreConfig } from "../api/lastFmStaticGenres";
 
 interface GenreHistoryProps {
-  currentGenre: Genre | undefined;
-  genreHistory: Genre[];
+  currentGenre: GenreConfig | undefined;
+  genreHistory: GenreConfig[];
 }
 
 const GenreHistory = (props: GenreHistoryProps) => {

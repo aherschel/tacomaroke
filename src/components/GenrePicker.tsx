@@ -1,10 +1,10 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { Genre } from "../api/genres";
+import { GenreConfig } from "../api/lastFmStaticGenres";
 
 interface GenrePickerProps {
-  genres: Genre[];
-  onGenreUpdated: (genre: Genre) => void;
+  genres: GenreConfig[];
+  onGenreUpdated: (genre: GenreConfig) => void;
 }
 
 const GenrePicker = (props: GenrePickerProps) => {

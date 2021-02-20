@@ -1,26 +1,28 @@
 import React from "react";
 import { Container, Row, Col, Tabs, Tab } from "react-bootstrap";
 import { Analytics } from "aws-amplify";
-import { genres, Genre } from "../api/genres";
+import { genres, GenreConfig } from "../api/lastFmStaticGenres";
 import { Party, partyClient, Round } from "../api/PartyClient";
 import GenreRandomizer from "./GenreRandomizer";
 import GenrePicker from "./GenrePicker";
 import GenreHistory from "./GenreHistory";
 import SongSuggestions from "./SongSuggestions";
-import genreClient from "../api/GenreClient";
+import lastFmMusicProvider from "../api/LastFmMusicProvider";
 
-const getCurrentGenreFromRounds = (rounds?: Round[]): Genre | undefined => {
+const getCurrentGenreFromRounds = (
+  rounds?: Round[]
+): GenreConfig | undefined => {
   if (rounds && rounds.length > 0) {
-    return genreClient.getGenreByCode(rounds[0].genreCode);
+    return lastFmMusicProvider.getGenreByCode(rounds[0].genreCode);
   }
   return undefined;
 };
 
-const getGenreHistoryFromRounds = (rounds?: Round[]): Genre[] => {
+const getGenreHistoryFromRounds = (rounds?: Round[]): GenreConfig[] => {
   if (rounds) {
     return rounds
       .slice(1)
-      .map((round) => genreClient.getGenreByCode(round.genreCode));
+      .map((round) => lastFmMusicProvider.getGenreByCode(round.genreCode));
   }
   return [];
 };
@@ -33,7 +35,7 @@ type GenreControllerProps = {
 const GenreController = (props: GenreControllerProps) => {
   const { isController, party } = props;
 
-  const onGenreUpdated = async (genre: Genre, wasManual: boolean) => {
+  const onGenreUpdated = async (genre: GenreConfig, wasManual: boolean) => {
     Analytics.record({
       name: wasManual ? "genreSelected" : "genreRandomized",
       attributes: { genreName: genre.name },

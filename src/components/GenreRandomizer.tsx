@@ -1,14 +1,14 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { Genre } from "../api/genres";
+import { GenreConfig } from "../api/lastFmStaticGenres";
 
-const pickElement = (elements: Genre[]): Genre => {
+const pickElement = (elements: GenreConfig[]): GenreConfig => {
   return elements[Math.floor(Math.random() * elements.length)];
 };
 
 interface GenreRandomizerProps {
-  genres: Genre[];
-  onGenreUpdated: (genre: Genre) => void;
+  genres: GenreConfig[];
+  onGenreUpdated: (genre: GenreConfig) => void;
 }
 
 const GenreRandomizer = (props: GenreRandomizerProps) => {

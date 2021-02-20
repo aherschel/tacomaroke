@@ -8,7 +8,7 @@ const YoutubeMusicIntegrationDebugPage = () => {
       <Jumbotron>
         <h1>
           <img
-            alt="youtbe music logo"
+            alt="youtube music logo"
             width="60"
             height="60"
             src="https://user-images.githubusercontent.com/868109/63057127-5d3e8780-be9e-11e9-9488-bf280a5ff1ed.png"
