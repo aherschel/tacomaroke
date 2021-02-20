@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Jumbotron } from "react-bootstrap";
-import spotifyClient, {
-  Category,
-  PlaylistTracks,
-  Track,
-} from "../api/SpotifyClient";
+import { Category, Song } from "../api/MusicProvider";
+import spotifyPlaylistMusicProvider from "../api/SpotifyPlaylistMusicProvider";
 
-const SpotifyTrack = ({ track }: { track: Track }) => {
+const SpotifySong = ({ song }: { song: Song }) => {
   const [showPlayer, enablePlayer] = useState(false);
 
   if (!showPlayer) {
@@ -17,13 +14,13 @@ const SpotifyTrack = ({ track }: { track: Track }) => {
             enablePlayer(true);
           }}
         >
-          Load {track.name}
+          Load {song.name}
         </Button>
       </div>
     );
   }
 
-  const src = `https://open.spotify.com/embed/track/${track.id}`;
+  const src = `https://open.spotify.com/embed/track/${song.id}`;
 
   return (
     <div>
@@ -32,10 +29,10 @@ const SpotifyTrack = ({ track }: { track: Track }) => {
           enablePlayer(false);
         }}
       >
-        Hide {track.name}
+        Hide {song.name}
       </Button>
       <iframe
-        title={track.id}
+        title={song.id}
         src={src}
         width="300"
         height="80"
@@ -46,53 +43,15 @@ const SpotifyTrack = ({ track }: { track: Track }) => {
   );
 };
 
-// TODO: Pull access token into a separate store, and implement re-auth on 403
-const UserPlaylists = () => {
-  const [playlists, setPlaylists] = useState<PlaylistTracks[]>();
-
-  const loadPlaylists = async () => {
-    const newPlaylists = await spotifyClient.listPlaylists();
-    const playlistMap: PlaylistTracks[] = await Promise.all(
-      newPlaylists.items.map(async (plist) => {
-        const titles = await spotifyClient.listPlaylistTitles(plist.id);
-        return { id: plist.id, title: plist.name, tracks: titles };
-      })
-    );
-    setPlaylists(playlistMap);
-  };
-
-  if (!playlists) {
-    return <Button onClick={loadPlaylists}>Load playlists</Button>;
-  }
-
-  return (
-    <div>
-      <h3>User Playlists</h3>
-      <ol>
-        {playlists.map((playlist) => (
-          <li key={playlist.id}>
-            {playlist.title}
-            <ul>
-              {playlist.tracks.map((track) => {
-                return (
-                  <li key={track.id}>
-                    <SpotifyTrack track={track} />
-                  </li>
-                );
-              })}
-            </ul>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-};
-
-const Categories = () => {
+const CategoryList = ({
+  onCategorySelected,
+}: {
+  onCategorySelected: (category: Category) => void;
+}) => {
   const [categories, setCategories] = useState<Category[]>();
 
   const loadCategories = async () => {
-    const newCategories = await spotifyClient.getCategories();
+    const newCategories = await spotifyPlaylistMusicProvider.getCategories();
     setCategories(newCategories);
   };
 
@@ -102,19 +61,69 @@ const Categories = () => {
 
   return (
     <div>
-      <h3>Categories</h3>
-      <ul>
-        {categories.map((category: Category) => (
-          <li key={category.id}>{category.name}</li>
+      <h3>User Playlists</h3>
+      <ol>
+        {categories.map((category) => (
+          <li key={category.id}>
+            {category.href && category.href !== "" ? (
+              <a href={category.href}>{category.name}</a>
+            ) : (
+              category.name
+            )}
+            <Button
+              onClick={() => {
+                onCategorySelected(category);
+              }}
+            >
+              Play
+            </Button>
+          </li>
         ))}
-      </ul>
+      </ol>
     </div>
   );
 };
 
+const SongList = ({ category }: { category: Category | undefined }) => {
+  const [songs, setSongs] = useState<Song[]>();
+
+  useEffect(() => {
+    const loadSongs = async () => {
+      const newSongs = await spotifyPlaylistMusicProvider.getSongsForCategory(
+        category
+      );
+      setSongs(newSongs);
+    };
+
+    if (category) {
+      loadSongs();
+    } else {
+      setSongs([]);
+    }
+  }, [category]);
+
+  if (!category) {
+    return null;
+  }
+
+  return (
+    <ul>
+      {songs?.map((song) => (
+        <li key={song.id}>
+          <SpotifySong song={song} />
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+/**
+ * TODO: Is it worth genericizing this particular component, or do we just embed
+ * specifically when we know we're using a spotify client. Probably the latter.
+ */
 const SpotifyAuthNotifications = () => {
   const [showAuth, setShowAuth] = useState(
-    spotifyClient.getAccessTokenFromURI() === undefined
+    spotifyPlaylistMusicProvider.getAccessTokenFromURI() === undefined
   );
   const [showExpired, setShowExpired] = useState(false);
   const [hideDenied, setHideDenied] = useState(false);
@@ -124,16 +133,19 @@ const SpotifyAuthNotifications = () => {
       setShowExpired(true);
     };
 
-    return spotifyClient.subscribeToAuthUpdates(handleAuthCallback);
+    return spotifyPlaylistMusicProvider.subscribeToAuthUpdates(
+      handleAuthCallback
+    );
   });
 
-  if (spotifyClient.isAuthDenied() && !hideDenied) {
+  if (spotifyPlaylistMusicProvider.isAuthDenied() && !hideDenied) {
     return (
       <Alert variant="danger" onClose={() => setHideDenied(true)} dismissible>
         <Alert.Heading>Spotify Authorization Denied</Alert.Heading>
         <p>
           You need to grant authorization for spotify integration to work. Click{" "}
-          <a href={spotifyClient.getAuthURL()}>this link</a> to refresh.
+          <a href={spotifyPlaylistMusicProvider.getAuthURL()}>this link</a> to
+          refresh.
         </p>
       </Alert>
     );
@@ -145,7 +157,8 @@ const SpotifyAuthNotifications = () => {
         <Alert.Heading>Spotify Authorization Required</Alert.Heading>
         <p>
           You need to grant authorization for spotify integration to work. Click{" "}
-          <a href={spotifyClient.getAuthURL()}>this link</a> to refresh.
+          <a href={spotifyPlaylistMusicProvider.getAuthURL()}>this link</a> to
+          refresh.
         </p>
       </Alert>
     );
@@ -161,7 +174,8 @@ const SpotifyAuthNotifications = () => {
         <Alert.Heading>Spotify Authorization Expired</Alert.Heading>
         <p>
           Your authorization needs to be refreshed. Click{" "}
-          <a href={spotifyClient.getAuthURL()}>this link</a> to refresh.
+          <a href={spotifyPlaylistMusicProvider.getAuthURL()}>this link</a> to
+          refresh.
         </p>
       </Alert>
     );
@@ -170,6 +184,8 @@ const SpotifyAuthNotifications = () => {
 };
 
 const SpotifyIntegrationDebugPage = () => {
+  const [category, setCategory] = useState<Category | undefined>(undefined);
+
   return (
     <>
       <SpotifyAuthNotifications />
@@ -189,8 +205,10 @@ const SpotifyIntegrationDebugPage = () => {
           playlist and playback apis.
         </p>
       </Jumbotron>
-      <Categories />
-      <UserPlaylists />
+      <CategoryList
+        onCategorySelected={(newCategory: Category) => setCategory(newCategory)}
+      />
+      <SongList category={category} />
     </>
   );
 };
