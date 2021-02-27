@@ -2,6 +2,7 @@
 
 Tacomaroke is a website which help you find songs to sing tacomaroke. This is the source for the app, which uses amplify for managing the backend components, and the frontend is built in typescript using react. Backend storage components use Appsync for graphql.
 
+.
 ![](src/images/TacomarokeScreenShot.png)
 
 ## Start development
