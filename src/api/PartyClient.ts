@@ -25,8 +25,8 @@ export type Party = {
   city: string;
   sessionStartTime: string;
   sessionState: SessionState;
-  rounds?: Round[];
-  singers?: Singer[];
+  rounds: Round[];
+  singers: Singer[];
 };
 
 class PartyClient {
@@ -115,6 +115,7 @@ class PartyClient {
         sessionStartTime: new Date().toISOString(),
         sessionState: SessionState.CREATING,
         rounds: [],
+        singers: [],
         expirationTimestamp: Math.round(Date.now() / 1000) + 60 * 60,
       },
     };

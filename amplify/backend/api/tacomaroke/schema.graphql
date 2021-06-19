@@ -3,8 +3,8 @@ type PartySession @model @key(fields: ["city", "sessionStartTime"], name: "cityB
   city: String!
   sessionStartTime: String!
   sessionState: SessionState!
-  rounds: [Round!]
-  singers: [Singer!]
+  rounds: [Round!]!
+  singers: [Singer!]!
   expirationTimestamp: AWSTimestamp! @ttl
 }
 
