@@ -1,4 +1,17 @@
 {
+  "alharris": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tacomaroke-alharris-160246-authRole",
+      "UnauthRoleArn": "arn:aws:iam::072027113961:role/amplify-tacomaroke-alharris-160246-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::072027113961:role/amplify-tacomaroke-alharris-160246-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-tacomaroke-alharris-160246-deployment",
+      "UnauthRoleName": "amplify-tacomaroke-alharris-160246-unauthRole",
+      "StackName": "amplify-tacomaroke-alharris-160246",
+      "StackId": "arn:aws:cloudformation:us-west-2:072027113961:stack/amplify-tacomaroke-alharris-160246/ca072150-d117-11eb-a96f-026b7bea2e75",
+      "AmplifyAppId": "d1zzh6fky5sz6w"
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-tacomaroke-dev-165514-authRole",
@@ -10,11 +23,6 @@
       "StackName": "amplify-tacomaroke-dev-165514",
       "StackId": "arn:aws:cloudformation:us-west-2:072027113961:stack/amplify-tacomaroke-dev-165514/7e9a9d00-ae9a-11ea-add3-06ee5e9000d6",
       "AmplifyAppId": "d1zzh6fky5sz6w"
-    },
-    "categories": {
-      "auth": {
-        "tacomarokee1f1cbb9": {}
-      }
     }
   },
   "master": {

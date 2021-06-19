@@ -1,12 +1,5 @@
 {
-  "auth": {
-    "tacomarokee1f1cbb9": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false
-    }
-  },
+  "auth": {},
   "analytics": {
     "tacomaroke": {
       "service": "Pinpoint",
